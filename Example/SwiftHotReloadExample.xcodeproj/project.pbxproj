@@ -7,19 +7,37 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		63980F472AEA8DA50099B122 /* SwiftHotReloadExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63980F462AEA8DA50099B122 /* SwiftHotReloadExampleApp.swift */; };
+		63980F472AEA8DA50099B122 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63980F462AEA8DA50099B122 /* App.swift */; };
 		63980F492AEA8DA50099B122 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63980F482AEA8DA50099B122 /* ContentView.swift */; };
 		63980F4B2AEA8DA60099B122 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63980F4A2AEA8DA60099B122 /* Assets.xcassets */; };
 		63980F4F2AEA8DA60099B122 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63980F4E2AEA8DA60099B122 /* Preview Assets.xcassets */; };
+		63980F7C2AEA937E0099B122 /* SwiftHotReload.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63980F7B2AEA937E0099B122 /* SwiftHotReload.framework */; };
+		63980F7D2AEA937E0099B122 /* SwiftHotReload.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 63980F7B2AEA937E0099B122 /* SwiftHotReload.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		63980F7E2AEA937E0099B122 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				63980F7D2AEA937E0099B122 /* SwiftHotReload.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		63980F432AEA8DA50099B122 /* SwiftHotReloadExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftHotReloadExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		63980F462AEA8DA50099B122 /* SwiftHotReloadExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftHotReloadExampleApp.swift; sourceTree = "<group>"; };
+		63980F462AEA8DA50099B122 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		63980F482AEA8DA50099B122 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		63980F4A2AEA8DA60099B122 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		63980F4C2AEA8DA60099B122 /* SwiftHotReloadExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftHotReloadExample.entitlements; sourceTree = "<group>"; };
 		63980F4E2AEA8DA60099B122 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		63980F7B2AEA937E0099B122 /* SwiftHotReload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftHotReload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		63980F872AEA95F10099B122 /* ReplaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaceView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63980F7C2AEA937E0099B122 /* SwiftHotReload.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -38,6 +57,7 @@
 			children = (
 				63980F452AEA8DA50099B122 /* SwiftHotReloadExample */,
 				63980F442AEA8DA50099B122 /* Products */,
+				63980F622AEA92380099B122 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -52,8 +72,9 @@
 		63980F452AEA8DA50099B122 /* SwiftHotReloadExample */ = {
 			isa = PBXGroup;
 			children = (
-				63980F462AEA8DA50099B122 /* SwiftHotReloadExampleApp.swift */,
+				63980F462AEA8DA50099B122 /* App.swift */,
 				63980F482AEA8DA50099B122 /* ContentView.swift */,
+				63980F872AEA95F10099B122 /* ReplaceView.swift */,
 				63980F4A2AEA8DA60099B122 /* Assets.xcassets */,
 				63980F4C2AEA8DA60099B122 /* SwiftHotReloadExample.entitlements */,
 				63980F4D2AEA8DA60099B122 /* Preview Content */,
@@ -69,6 +90,14 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		63980F622AEA92380099B122 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				63980F7B2AEA937E0099B122 /* SwiftHotReload.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -79,12 +108,15 @@
 				63980F3F2AEA8DA50099B122 /* Sources */,
 				63980F402AEA8DA50099B122 /* Frameworks */,
 				63980F412AEA8DA50099B122 /* Resources */,
+				63980F7E2AEA937E0099B122 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = SwiftHotReloadExample;
+			packageProductDependencies = (
+			);
 			productName = SwiftHotReloadExample;
 			productReference = 63980F432AEA8DA50099B122 /* SwiftHotReloadExample.app */;
 			productType = "com.apple.product-type.application";
@@ -113,6 +145,8 @@
 				Base,
 			);
 			mainGroup = 63980F3A2AEA8DA50099B122;
+			packageReferences = (
+			);
 			productRefGroup = 63980F442AEA8DA50099B122 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -140,7 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63980F492AEA8DA50099B122 /* ContentView.swift in Sources */,
-				63980F472AEA8DA50099B122 /* SwiftHotReloadExampleApp.swift in Sources */,
+				63980F472AEA8DA50099B122 /* App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,6 +321,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
+				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.banjun.SwiftHotReloadExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -323,6 +358,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
+				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.banjun.SwiftHotReloadExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;

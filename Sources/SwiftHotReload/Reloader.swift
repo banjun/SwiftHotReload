@@ -20,7 +20,7 @@ public final class Reloader: ObservableObject {
         private let sdk: URL
         private let arch: String
 
-        init(derivedData: URL = Env.shared.estimataedDerivedData!, targetSwiftFile: URL, confBuildDirAppRandomString: String = Env.shared.estimatedConfigurationBuildRandomString!, mainModule: String = Env.shared.estimatedMainModule!, modules: [String] = [], configurationPlatform: String = Env.shared.estimatedConfigurationPlatform!, arch: String = Env.shared.estimatedArch, targetTriple: String = Env.shared.estimatedTargetTriple!, sdk: URL = Env.shared.estimatedSDK!) {
+        public init(derivedData: URL = Env.shared.estimataedDerivedData!, targetSwiftFile: URL, confBuildDirAppRandomString: String = Env.shared.estimatedConfigurationBuildRandomString!, mainModule: String = Env.shared.estimatedMainModule!, modules: [String] = [], configurationPlatform: String = Env.shared.estimatedConfigurationPlatform!, arch: String = Env.shared.estimatedArch, targetTriple: String = Env.shared.estimatedTargetTriple!, sdk: URL = Env.shared.estimatedSDK!) {
             self.targetSwiftFile = targetSwiftFile
             self.derivedData = derivedData
             self.moduleCachePath = derivedData.appendingPathComponent("ModuleCache.noindex")

@@ -1,19 +1,19 @@
 #if DEBUG
 import Foundation
 
-struct Env {
-    static let shared: Env = .init()
+public struct Env {
+    public static let shared: Env = .init()
 
     /// /Users/username
-    var estimatedHomeDir: URL? {
-        SIMULATOR_HOST_HOME.map(URL.init(fileURLWithPath:))
+    public var estimatedHomeDir: URL? {
+        (SIMULATOR_HOST_HOME ?? NSHomeDirectory()).map(URL.init(fileURLWithPath:))
     }
     /// /Users/username/Library/Developer/Xcode/DerivedData/app-abcdefg0123456789/Build/Products/Debug-iphonesimulator
     var estimatedBuilProductsDir: URL? {
         (DYLD_FRAMEWORK_PATH ?? __XPC_DYLD_FRAMEWORK_PATH ?? __XPC_DYLD_LIBRARY_PATH ?? __XCODE_BUILT_PRODUCTS_DIR_PATHS ?? __XPC_DYLD_LIBRARY_PATH ?? PWD).map(URL.init(fileURLWithPath:))
     }
     /// /Users/username/Library/Developer/Xcode/DerivedData
-    var estimataedDerivedData: URL? {
+    public var estimataedDerivedData: URL? {
         estimatedBuilProductsDir.map {
             URL(fileURLWithPath: $0.path.components(separatedBy: "/")
                 .reversed().drop {$0 != "DerivedData"}.reversed()
@@ -21,13 +21,14 @@ struct Env {
         }
     }
     /// app-abcdefg0123456789
-    var estimatedConfigurationBuildRandomString: String? {
+    public var estimatedConfigurationBuildRandomString: String? {
         (estimatedBuilProductsDir?.path ?? "").components(separatedBy: "/")
             .drop {$0 != "DerivedData"}
             .dropFirst().first
     }
     /// app name
-    var estimatedMainModule: String? {
+    public var estimatedMainModule: String? {
+        if let CFBundleExecutable { return CFBundleExecutable }
         guard let pair = estimatedConfigurationBuildRandomString?.components(separatedBy: "-"), pair.count == 2 else { return nil }
         return pair.first
     }
@@ -42,7 +43,7 @@ struct Env {
     }
     /// Debug-ipphonesimulator
     /// Debug
-    var estimatedConfigurationPlatform: String? {
+    public var estimatedConfigurationPlatform: String? {
         estimatedBuilProductsDir?.lastPathComponent
     }
     /// iphonesimulator
@@ -58,7 +59,7 @@ struct Env {
         }).map(URL.init(fileURLWithPath:))
     }
     /// /Applications/Xcode1501.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator17.0.sdk
-    var estimatedSDK: URL? {
+    public var estimatedSDK: URL? {
         estimatedDeveloperDir?.appendingPathComponent("Platforms")
             .appendingPathComponent(estimatedPlatformCamelCase! + ".platform")
             .appendingPathComponent("Developer/SDKs")
@@ -74,7 +75,7 @@ struct Env {
     }
     /// arm64-apple-ios14.0-simulator
     /// arm64-apple-macos13.0
-    var estimatedTargetTriple: String? {
+    public var estimatedTargetTriple: String? {
         guard let os = (DTPlatformName?.contains("iphone") == true ? "ios"
                         : DTPlatformName?.contains("macosx") == true ? "macos"
                         : nil) else { return nil }
@@ -83,7 +84,7 @@ struct Env {
             .compactMap { $0 }.joined(separator: "-")
     }
     /// arm64
-    var estimatedArch: String {
+    public var estimatedArch: String {
 #if arch(arm64)
         "arm64"
 #endif
@@ -109,6 +110,7 @@ struct Env {
     var CFBundleSupportedPlatforms: [String]
     var MinimumOSVersion: String?
     var LSMinimumSystemVersion: String?
+    var CFBundleExecutable: String?
 
     private init() {
         let env = ProcessInfo().environment
@@ -131,6 +133,7 @@ struct Env {
         CFBundleSupportedPlatforms = info["CFBundleSupportedPlatforms"] as? [String] ?? []
         MinimumOSVersion = info["MinimumOSVersion"] as? String
         LSMinimumSystemVersion = info["LSMinimumSystemVersion"] as? String
+        CFBundleExecutable = info["CFBundleExecutable"] as? String
     }
 }
 #endif

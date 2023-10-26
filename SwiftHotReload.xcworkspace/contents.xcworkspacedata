@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:Package.swift">
+   </FileRef>
+   <Group
+      location = "group:Tests"
+      name = "Tests">
+      <Group
+         location = "group:SwiftHotReloadTests"
+         name = "SwiftHotReloadTests">
+         <FileRef
+            location = "group:SwiftHotReloadTests.swift">
+         </FileRef>
+      </Group>
+   </Group>
+   <FileRef
+      location = "group:SwiftHotReload/SwiftHotReload.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Example/SwiftHotReloadExample.xcodeproj">
+   </FileRef>
+</Workspace>
