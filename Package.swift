@@ -5,19 +5,12 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftHotReload",
+    platforms: [.iOS(.v14), .macOS(.v13)],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "SwiftHotReload",
-            targets: ["SwiftHotReload"]),
+        .library(name: "SwiftHotReload", targets: ["SwiftHotReload"]),
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "SwiftHotReload"),
-        .testTarget(
-            name: "SwiftHotReloadTests",
-            dependencies: ["SwiftHotReload"]),
+        .target(name: "SwiftHotReload"),
+        .testTarget(name: "SwiftHotReloadTests", dependencies: ["SwiftHotReload"]),
     ]
 )
