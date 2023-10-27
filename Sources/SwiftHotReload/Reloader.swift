@@ -96,7 +96,16 @@ public final class Reloader: ObservableObject {
         private func load(dylibPath: URL) -> Bool {
             let handle = dlopen(dylibPath.path, RTLD_NOW)
             NSLog("%@", "🍓 dlopen handle = \(String(describing: handle))")
-            return handle != nil
+            if handle != nil {
+                return true
+            } else {
+                let error = String(cString: dlerror())
+                NSLog("%@", "🍓 dlerror = \(error)")
+                if error.contains("symbol not found in flat namespace") {
+                    NSLog("%@", "🍓 possible workarounds: remove `private` from the func, or add `-Xfrontend -enable-private-imports` to OTHER_SWIFT_FLAGS of the module to be overridden")
+                }
+                return false
+            }
         }
     }
 
