@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: swift build
+  podspec:
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: pod lib lint
