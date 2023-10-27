@@ -9,8 +9,9 @@ public struct Env {
         (SIMULATOR_HOST_HOME ?? NSHomeDirectory()).map(URL.init(fileURLWithPath:))
     }
     /// /Users/username/Library/Developer/Xcode/DerivedData/app-abcdefg0123456789/Build/Products/Debug-iphonesimulator
-    var estimatedBuilProductsDir: URL? {
-        (DYLD_FRAMEWORK_PATH ?? __XPC_DYLD_FRAMEWORK_PATH ?? __XPC_DYLD_LIBRARY_PATH ?? __XCODE_BUILT_PRODUCTS_DIR_PATHS ?? __XPC_DYLD_LIBRARY_PATH ?? PWD).map(URL.init(fileURLWithPath:))
+    var estimatedBuilProductsDir: [URL] {
+        DYLD_FRAMEWORK_PATH.map(URL.init(fileURLWithPath:))
+        + [(__XPC_DYLD_FRAMEWORK_PATH ?? __XPC_DYLD_LIBRARY_PATH ?? __XCODE_BUILT_PRODUCTS_DIR_PATHS ?? __XPC_DYLD_LIBRARY_PATH ?? PWD).map(URL.init(fileURLWithPath:))].compactMap {$0}
     }
     /// /Users/username/Library/Developer/Xcode/DerivedData
     public var estimataedDerivedData: URL? {
@@ -18,13 +19,15 @@ public struct Env {
             URL(fileURLWithPath: $0.path.components(separatedBy: "/")
                 .reversed().drop {$0 != "DerivedData"}.reversed()
                 .joined(separator: "/"))
-        }
+        }.first { $0.path.contains("DerivedData") }
     }
     /// app-abcdefg0123456789
     public var estimatedConfigurationBuildRandomString: String? {
-        (estimatedBuilProductsDir?.path ?? "").components(separatedBy: "/")
-            .drop {$0 != "DerivedData"}
-            .dropFirst().first
+        estimatedBuilProductsDir.compactMap {
+            $0.path.components(separatedBy: "/")
+                .drop {$0 != "DerivedData"}
+                .dropFirst().first
+        }.first
     }
     /// app name
     public var estimatedMainModule: String? {
@@ -34,7 +37,7 @@ public struct Env {
     }
     /// Debug
     var estimatedConfiguration: String? {
-        guard let pair = estimatedBuilProductsDir?.lastPathComponent.components(separatedBy: "-") else { return nil }
+        guard let pair = (estimatedBuilProductsDir.compactMap { $0.lastPathComponent.components(separatedBy: "-") }.first) else { return nil }
         return switch pair.count {
         case 1: pair[0]
         case 2: pair[1]
@@ -44,7 +47,7 @@ public struct Env {
     /// Debug-ipphonesimulator
     /// Debug
     public var estimatedConfigurationPlatform: String? {
-        estimatedBuilProductsDir?.lastPathComponent
+        estimatedBuilProductsDir.first?.lastPathComponent
     }
     /// iphonesimulator
     var estimatedPlatform: String? {
@@ -92,7 +95,7 @@ public struct Env {
 
     // Environment Variables
     var SIMULATOR_HOST_HOME: String?
-    var DYLD_FRAMEWORK_PATH: String?
+    var DYLD_FRAMEWORK_PATH: [String]
     var DYLD_LIBRARY_PATH: [String]
     var DYLD_INSERT_LIBRARIES: String?
     var __XPC_DYLD_FRAMEWORK_PATH: String?
@@ -115,8 +118,8 @@ public struct Env {
     private init() {
         let env = ProcessInfo().environment
         SIMULATOR_HOST_HOME = env["SIMULATOR_HOST_HOME"]
-        DYLD_FRAMEWORK_PATH = env["DYLD_FRAMEWORK_PATH"]
-        DYLD_LIBRARY_PATH = (env["DYLD_LIBRARY_PATH"] ?? "") .components(separatedBy: ":")
+        DYLD_FRAMEWORK_PATH = (env["DYLD_FRAMEWORK_PATH"] ?? "").components(separatedBy: ":")
+        DYLD_LIBRARY_PATH = (env["DYLD_LIBRARY_PATH"] ?? "").components(separatedBy: ":")
         DYLD_INSERT_LIBRARIES = env["DYLD_INSERT_LIBRARIES"]
         __XPC_DYLD_FRAMEWORK_PATH = env["__XPC_DYLD_FRAMEWORK_PATH"]
         __XPC_DYLD_LIBRARY_PATH = env["__XPC_DYLD_LIBRARY_PATH"]
