@@ -90,6 +90,8 @@ public struct Env {
     public var estimatedArch: String {
 #if arch(arm64)
         "arm64"
+#elseif arch(x86_64)
+        "x86_64"
 #endif
     }
 
