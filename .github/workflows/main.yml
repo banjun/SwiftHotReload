@@ -8,13 +8,19 @@ on:
 
 jobs:
   build:
-    runs-on: macOS-latest
+    runs-on: macOS-13
     steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '^15.0.1'
     - uses: actions/checkout@v2
     - run: swift build
   podspec:
-    runs-on: macOS-latest
+    runs-on: macOS-13
     steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '^15.0.1'
     - uses: actions/checkout@v2
     - run: bundle install
     - run: bundle exec pod lib lint
