@@ -7,18 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		63980F752AEA93310099B122 /* SwiftHotReload.h in Headers */ = {isa = PBXBuildFile; fileRef = 63980F742AEA93310099B122 /* SwiftHotReload.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		63980F842AEA93E40099B122 /* Reloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63980F812AEA93C60099B122 /* Reloader.swift */; };
-		63980F852AEA93E40099B122 /* TargetSwiftFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63980F822AEA93C60099B122 /* TargetSwiftFile.swift */; };
-		63980F862AEA93E40099B122 /* Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63980F832AEA93C60099B122 /* Env.swift */; };
+		630C245E2AEBD4E10012C490 /* TargetSwiftFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630C245B2AEBD4E10012C490 /* TargetSwiftFile.swift */; };
+		630C245F2AEBD4E10012C490 /* Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630C245C2AEBD4E10012C490 /* Env.swift */; };
+		630C24602AEBD4E10012C490 /* Reloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630C245D2AEBD4E10012C490 /* Reloader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		630C24482AEBD3FF0012C490 /* SwiftHotReload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwiftHotReload.h; path = /Users/jun.ban/projects/github/SwiftHotReload/FrameworkTarget/SwiftHotReload.h; sourceTree = "<absolute>"; };
+		630C24522AEBD4780012C490 /* SwiftHotReloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftHotReloadTests.swift; sourceTree = "<group>"; };
+		630C245B2AEBD4E10012C490 /* TargetSwiftFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TargetSwiftFile.swift; path = ../../Sources/TargetSwiftFile.swift; sourceTree = "<group>"; };
+		630C245C2AEBD4E10012C490 /* Env.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Env.swift; path = ../../Sources/Env.swift; sourceTree = "<group>"; };
+		630C245D2AEBD4E10012C490 /* Reloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reloader.swift; path = ../../Sources/Reloader.swift; sourceTree = "<group>"; };
 		63980F712AEA93310099B122 /* SwiftHotReload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftHotReload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		63980F742AEA93310099B122 /* SwiftHotReload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftHotReload.h; sourceTree = "<group>"; };
-		63980F812AEA93C60099B122 /* Reloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reloader.swift; sourceTree = "<group>"; };
-		63980F822AEA93C60099B122 /* TargetSwiftFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetSwiftFile.swift; sourceTree = "<group>"; };
-		63980F832AEA93C60099B122 /* Env.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Env.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,11 +32,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		630C244A2AEBD45B0012C490 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				630C245C2AEBD4E10012C490 /* Env.swift */,
+				630C245D2AEBD4E10012C490 /* Reloader.swift */,
+				630C245B2AEBD4E10012C490 /* TargetSwiftFile.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		630C24512AEBD4780012C490 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				630C24522AEBD4780012C490 /* SwiftHotReloadTests.swift */,
+			);
+			name = Tests;
+			path = ../Tests;
+			sourceTree = "<group>";
+		};
 		63980F672AEA93310099B122 = {
 			isa = PBXGroup;
 			children = (
-				63980F7F2AEA93C60099B122 /* Sources */,
-				63980F732AEA93310099B122 /* SwiftHotReload */,
+				630C24482AEBD3FF0012C490 /* SwiftHotReload.h */,
+				630C244A2AEBD45B0012C490 /* Sources */,
+				630C24512AEBD4780012C490 /* Tests */,
 				63980F722AEA93310099B122 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -49,33 +69,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		63980F732AEA93310099B122 /* SwiftHotReload */ = {
-			isa = PBXGroup;
-			children = (
-				63980F742AEA93310099B122 /* SwiftHotReload.h */,
-			);
-			path = SwiftHotReload;
-			sourceTree = "<group>";
-		};
-		63980F7F2AEA93C60099B122 /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				63980F802AEA93C60099B122 /* SwiftHotReload */,
-			);
-			name = Sources;
-			path = ../Sources;
-			sourceTree = "<group>";
-		};
-		63980F802AEA93C60099B122 /* SwiftHotReload */ = {
-			isa = PBXGroup;
-			children = (
-				63980F812AEA93C60099B122 /* Reloader.swift */,
-				63980F822AEA93C60099B122 /* TargetSwiftFile.swift */,
-				63980F832AEA93C60099B122 /* Env.swift */,
-			);
-			path = SwiftHotReload;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -83,7 +76,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63980F752AEA93310099B122 /* SwiftHotReload.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,6 +112,7 @@
 				TargetAttributes = {
 					63980F702AEA93310099B122 = {
 						CreatedOnToolsVersion = 15.0.1;
+						LastSwiftMigration = 1500;
 					};
 				};
 			};
@@ -156,9 +149,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63980F842AEA93E40099B122 /* Reloader.swift in Sources */,
-				63980F852AEA93E40099B122 /* TargetSwiftFile.swift in Sources */,
-				63980F862AEA93E40099B122 /* Env.swift in Sources */,
+				630C245E2AEBD4E10012C490 /* TargetSwiftFile.swift in Sources */,
+				630C24602AEBD4E10012C490 /* Reloader.swift in Sources */,
+				630C245F2AEBD4E10012C490 /* Env.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +281,7 @@
 		63980F792AEA93310099B122 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -318,6 +312,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -326,6 +321,7 @@
 		63980F7A2AEA93310099B122 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;

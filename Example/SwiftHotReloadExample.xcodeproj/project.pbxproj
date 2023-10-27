@@ -55,7 +55,12 @@
 		63980F3A2AEA8DA50099B122 = {
 			isa = PBXGroup;
 			children = (
-				63980F452AEA8DA50099B122 /* SwiftHotReloadExample */,
+				63980F462AEA8DA50099B122 /* App.swift */,
+				63980F482AEA8DA50099B122 /* ContentView.swift */,
+				63980F872AEA95F10099B122 /* ReplaceView.swift */,
+				63980F4A2AEA8DA60099B122 /* Assets.xcassets */,
+				63980F4C2AEA8DA60099B122 /* SwiftHotReloadExample.entitlements */,
+				63980F4D2AEA8DA60099B122 /* Preview Content */,
 				63980F442AEA8DA50099B122 /* Products */,
 				63980F622AEA92380099B122 /* Frameworks */,
 			);
@@ -67,19 +72,6 @@
 				63980F432AEA8DA50099B122 /* SwiftHotReloadExample.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		63980F452AEA8DA50099B122 /* SwiftHotReloadExample */ = {
-			isa = PBXGroup;
-			children = (
-				63980F462AEA8DA50099B122 /* App.swift */,
-				63980F482AEA8DA50099B122 /* ContentView.swift */,
-				63980F872AEA95F10099B122 /* ReplaceView.swift */,
-				63980F4A2AEA8DA60099B122 /* Assets.xcassets */,
-				63980F4C2AEA8DA60099B122 /* SwiftHotReloadExample.entitlements */,
-				63980F4D2AEA8DA60099B122 /* Preview Content */,
-			);
-			path = SwiftHotReloadExample;
 			sourceTree = "<group>";
 		};
 		63980F4D2AEA8DA60099B122 /* Preview Content */ = {

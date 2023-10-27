@@ -4,19 +4,14 @@
    <FileRef
       location = "group:Package.swift">
    </FileRef>
-   <Group
-      location = "group:Tests"
-      name = "Tests">
-      <Group
-         location = "group:SwiftHotReloadTests"
-         name = "SwiftHotReloadTests">
-         <FileRef
-            location = "group:SwiftHotReloadTests.swift">
-         </FileRef>
-      </Group>
-   </Group>
    <FileRef
-      location = "group:SwiftHotReload/SwiftHotReload.xcodeproj">
+      location = "container:Sources">
+   </FileRef>
+   <FileRef
+      location = "group:Tests">
+   </FileRef>
+   <FileRef
+      location = "group:FrameworkTarget/SwiftHotReload.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Example/SwiftHotReloadExample.xcodeproj">
