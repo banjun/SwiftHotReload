@@ -15,6 +15,7 @@ public final class Reloader: ObservableObject {
         private let moduleCachePath: URL
         private let confBuildDir: URL
         private let headerSearchPaths: [URL]
+        private let headerMap: URL
         private let buildDir: URL
         private let targetTriple: String
         private let sdk: URL
@@ -36,6 +37,9 @@ public final class Reloader: ObservableObject {
                     .appendingPathComponent("Objects-normal")
                     .appendingPathComponent(arch)
             }
+            self.headerMap = confBuildDir
+                .appendingPathComponent(mainModule + ".build")
+                .appendingPathComponent("\(mainModule)-project-headers.hmap")
             self.buildDir = headerSearchPaths.first!
             self.targetTriple = targetTriple
             self.sdk = sdk
@@ -80,7 +84,8 @@ public final class Reloader: ObservableObject {
                 ["-module-cache-path", moduleCachePath.path], // required in some cases
                 ["-Xlinker", "-undefined", "-Xlinker", "suppress"], // avoid fatal error on the linker
                 ["-Xfrontend", "-disable-access-control"], // with this, internal symbols can be used
-                (headerSearchPaths + importedModuleSearchPaths).flatMap { ["-I", $0.path] }
+                (headerSearchPaths + importedModuleSearchPaths).flatMap { ["-I", $0.path] },
+                ["-Xcc", "-I", "-Xcc", headerMap.path]
             ].flatMap { $0 }
             task.setValue(args, forKey: "arguments")
             NSLog("%@", "🍓 exec and args = ")
