@@ -12,7 +12,7 @@ Pod::Spec.new do |spec|
   spec.osx.deployment_target = "11.0"
   # spec.watchos.deployment_target = "2.0"
   # spec.tvos.deployment_target = "9.0"
-  # spec.visionos.deployment_target = "1.0"
+  spec.visionos.deployment_target = "1.0"
   spec.source       = { :git => "https://github.com/banjun/SwiftHotReload.git", :tag => "#{spec.version}" }
   spec.source_files  = "Sources/**/*.swift"
   spec.swift_version = "5.1"
