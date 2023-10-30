@@ -19,8 +19,7 @@ struct App: SwiftUI.App {
         let reloader = Reloader(.init(
             targetSwiftFile: Env.shared.estimatedHomeDir!
                 .appendingPathComponent("projects/github/SwiftHotReload")
-                .appendingPathComponent("Example/SwiftHotReloadExample")
-                .appendingPathComponent("ReplaceView.swift")
+                .appendingPathComponent("Example/ReplaceView.swift")
         ))
         reloader.install()
         return reloader

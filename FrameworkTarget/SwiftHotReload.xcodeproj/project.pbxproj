@@ -13,11 +13,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		630C24482AEBD3FF0012C490 /* SwiftHotReload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwiftHotReload.h; path = /Users/jun.ban/projects/github/SwiftHotReload/FrameworkTarget/SwiftHotReload.h; sourceTree = "<absolute>"; };
+		630C24482AEBD3FF0012C490 /* SwiftHotReload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftHotReload.h; sourceTree = SOURCE_ROOT; };
 		630C24522AEBD4780012C490 /* SwiftHotReloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftHotReloadTests.swift; sourceTree = "<group>"; };
-		630C245B2AEBD4E10012C490 /* TargetSwiftFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TargetSwiftFile.swift; path = ../../Sources/TargetSwiftFile.swift; sourceTree = "<group>"; };
-		630C245C2AEBD4E10012C490 /* Env.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Env.swift; path = ../../Sources/Env.swift; sourceTree = "<group>"; };
-		630C245D2AEBD4E10012C490 /* Reloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reloader.swift; path = ../../Sources/Reloader.swift; sourceTree = "<group>"; };
+		630C245B2AEBD4E10012C490 /* TargetSwiftFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetSwiftFile.swift; sourceTree = "<group>"; };
+		630C245C2AEBD4E10012C490 /* Env.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Env.swift; sourceTree = "<group>"; };
+		630C245D2AEBD4E10012C490 /* Reloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reloader.swift; sourceTree = "<group>"; };
 		63980F712AEA93310099B122 /* SwiftHotReload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftHotReload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -39,8 +39,9 @@
 				630C245D2AEBD4E10012C490 /* Reloader.swift */,
 				630C245B2AEBD4E10012C490 /* TargetSwiftFile.swift */,
 			);
-			path = Sources;
-			sourceTree = "<group>";
+			name = Sources;
+			path = ../Sources;
+			sourceTree = SOURCE_ROOT;
 		};
 		630C24512AEBD4780012C490 /* Tests */ = {
 			isa = PBXGroup;
