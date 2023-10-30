@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftHotReload",
-    platforms: [.iOS(.v14), .macOS(.v13)],
+    platforms: [.iOS(.v14), .macOS(.v13), .visionOS(.v1)],
     products: [
         .library(name: "SwiftHotReload", targets: ["SwiftHotReload"]),
     ],
