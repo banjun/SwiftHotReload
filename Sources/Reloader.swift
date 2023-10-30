@@ -15,7 +15,7 @@ public final class Reloader: ObservableObject {
         private let moduleCachePath: URL
         private let confBuildDir: URL
         private let headerSearchPaths: [URL]
-        private let headerMap: URL
+        private let headerMaps: [URL]
         private let buildDir: URL
         private let targetTriple: String
         private let sdk: URL
@@ -25,9 +25,10 @@ public final class Reloader: ObservableObject {
             self.targetSwiftFile = targetSwiftFile
             self.derivedData = derivedData
             self.moduleCachePath = derivedData.appendingPathComponent("ModuleCache.noindex")
-            let confBuildDir = derivedData
+            let intermediatesDir = derivedData
                 .appendingPathComponent(confBuildDirAppRandomString)
                 .appendingPathComponent("Build/Intermediates.noindex")
+            let confBuildDir = intermediatesDir
                 .appendingPathComponent(mainModule + ".build")
                 .appendingPathComponent(configurationPlatform)
             self.confBuildDir = confBuildDir
@@ -37,9 +38,15 @@ public final class Reloader: ObservableObject {
                     .appendingPathComponent("Objects-normal")
                     .appendingPathComponent(arch)
             }
-            self.headerMap = confBuildDir
+            self.headerMaps = [confBuildDir
                 .appendingPathComponent(mainModule + ".build")
                 .appendingPathComponent("\(mainModule)-project-headers.hmap")
+            ] + [intermediatesDir
+                .appendingPathComponent("Pods" + ".build")
+                .appendingPathComponent(configurationPlatform)
+                .appendingPathComponent("Pods-\(mainModule)" + ".build")
+                .appendingPathComponent("Pods_\(mainModule)-project-headers.hmap")
+            ]
             self.buildDir = headerSearchPaths.first!
             self.targetTriple = targetTriple
             self.sdk = sdk
@@ -84,8 +91,9 @@ public final class Reloader: ObservableObject {
                 ["-module-cache-path", moduleCachePath.path], // required in some cases
                 ["-Xlinker", "-undefined", "-Xlinker", "suppress"], // avoid fatal error on the linker
                 ["-Xfrontend", "-disable-access-control"], // with this, internal symbols can be used
+                ["-Xlinker", "-flat_namespace"], // for Xcode 14 (unneeded for Xcode 15)
                 (headerSearchPaths + importedModuleSearchPaths).flatMap { ["-I", $0.path] },
-                ["-Xcc", "-I", "-Xcc", headerMap.path]
+                headerMaps.flatMap { ["-Xcc", "-I", "-Xcc", $0.path] }
             ].flatMap { $0 }
             task.setValue(args, forKey: "arguments")
             NSLog("%@", "🍓 exec and args = ")
