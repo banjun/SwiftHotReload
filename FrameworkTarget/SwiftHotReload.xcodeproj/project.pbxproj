@@ -13,6 +13,7 @@
 		63458ABF2AFA6232001A5630 /* Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63458ABE2AFA6232001A5630 /* Loader.swift */; };
 		63458AC32AFA6247001A5630 /* Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63458AC22AFA6247001A5630 /* Builder.swift */; };
 		63458AC42AFA6247001A5630 /* FileMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63458AC12AFA6247001A5630 /* FileMonitor.swift */; };
+		6355B0F52AFB6899008C4C50 /* Proxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6355B0F42AFB6899008C4C50 /* Proxy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		63458ABE2AFA6232001A5630 /* Loader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loader.swift; sourceTree = "<group>"; };
 		63458AC12AFA6247001A5630 /* FileMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileMonitor.swift; sourceTree = "<group>"; };
 		63458AC22AFA6247001A5630 /* Builder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Builder.swift; sourceTree = "<group>"; };
+		6355B0F42AFB6899008C4C50 /* Proxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Proxy.swift; sourceTree = "<group>"; };
 		63980F712AEA93310099B122 /* SwiftHotReload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftHotReload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -44,6 +46,7 @@
 				630C245C2AEBD4E10012C490 /* Env.swift */,
 				63458ABC2AFA622E001A5630 /* StandaloneReloader.swift */,
 				63458AC12AFA6247001A5630 /* FileMonitor.swift */,
+				6355B0F42AFB6899008C4C50 /* Proxy.swift */,
 				63458AC22AFA6247001A5630 /* Builder.swift */,
 				63458ABE2AFA6232001A5630 /* Loader.swift */,
 				630C245B2AEBD4E10012C490 /* TargetSwiftFile.swift */,
@@ -162,6 +165,7 @@
 				630C245E2AEBD4E10012C490 /* TargetSwiftFile.swift in Sources */,
 				63458ABD2AFA622E001A5630 /* StandaloneReloader.swift in Sources */,
 				63458AC42AFA6247001A5630 /* FileMonitor.swift in Sources */,
+				6355B0F52AFB6899008C4C50 /* Proxy.swift in Sources */,
 				630C245F2AEBD4E10012C490 /* Env.swift in Sources */,
 				63458ABF2AFA6232001A5630 /* Loader.swift in Sources */,
 				63458AC32AFA6247001A5630 /* Builder.swift in Sources */,
@@ -305,7 +309,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
@@ -345,7 +349,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",

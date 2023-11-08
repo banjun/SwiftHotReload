@@ -10,7 +10,7 @@ final actor Builder {
     private let headerMaps: [URL]
     private let buildDir: URL
     private let targetTriple: String
-    private let sdk: URL
+    private let sdk: URL?
     private let arch: String
     private let platformName: String
 
@@ -54,7 +54,7 @@ final actor Builder {
         ]
         self.buildDir = headerSearchPaths.first!
         self.targetTriple = targetTriple ?? env.estimatedTargetTriple!
-        self.sdk = sdk ?? env.estimatedSDK!
+        self.sdk = sdk ?? env.estimatedSDK
         self.platformName = platformName ?? env.DTPlatformName!
     }
 
@@ -89,7 +89,7 @@ final actor Builder {
             ["-emit-library"], // generates dylib
             [targetSwiftFile.path],
             ["-o", dylibPath.path],
-            ["-sdk", sdk.path],
+            sdk.map {["-sdk", $0.path]} ?? [],
             ["-target", targetTriple],
             ["-module-cache-path", moduleCachePath.path], // required in some cases
             ["-Xlinker", "-undefined", "-Xlinker", "suppress"], // avoid fatal error on the linker

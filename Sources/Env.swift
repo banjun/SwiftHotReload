@@ -1,7 +1,7 @@
 #if DEBUG
 import Foundation
 
-public struct Env {
+public struct Env: Codable {
     public static let shared: Env = .init()
 
     /// /Users/username
@@ -116,6 +116,7 @@ public struct Env {
     var MinimumOSVersion: String?
     var LSMinimumSystemVersion: String?
     var CFBundleExecutable: String?
+    var CFBundleIdentifier: String?
 
     private init() {
         let env = ProcessInfo().environment
@@ -139,6 +140,7 @@ public struct Env {
         MinimumOSVersion = info["MinimumOSVersion"] as? String
         LSMinimumSystemVersion = info["LSMinimumSystemVersion"] as? String
         CFBundleExecutable = info["CFBundleExecutable"] as? String
+        CFBundleIdentifier = info["CFBundleIdentifier"] as? String
     }
 }
 #endif
