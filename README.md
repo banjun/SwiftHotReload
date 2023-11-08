@@ -66,13 +66,13 @@ Set up app as described below and build & run on a supported platform.
 
 ```swift
 extension App {
-    static let reloader = Reloader(.init(
-            // file path to be monitored
-            targetSwiftFile: Env.shared.estimatedHomeDir!
-                .appendingPathComponent("path_to_project/RuntimeOverrides.swift")
-        ))
+    static let reloader = StandaloneReloader(
+        // file path to be monitored
+        monitoredSwiftFile: Env.shared.estimatedHomeDir!
+            .appendingPathComponent("path_to_project/RuntimeOverrides.swift")
+    )
     :        
-    reloader.install() // start a file monitor
+    _ = App.reloader // use to load the lazy static property above and start a file monitor
 }
 ```
 

@@ -5,6 +5,9 @@
       location = "group:Package.swift">
    </FileRef>
    <FileRef
+      location = "group:README.md">
+   </FileRef>
+   <FileRef
       location = "container:Sources">
    </FileRef>
    <FileRef
