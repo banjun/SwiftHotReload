@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftHotReload
 
 // see also ReplaceView.swift
 struct ContentView: View {

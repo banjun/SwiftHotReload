@@ -15,15 +15,10 @@ struct App: SwiftUI.App {
 
 #if DEBUG
     // see also ReplaceView.swift
-    static let reloader: Reloader = {
-        let reloader = Reloader(.init(
-            targetSwiftFile: Env.shared.estimatedHomeDir!
-                .appendingPathComponent("projects/github/SwiftHotReload")
-                .appendingPathComponent("Example/ReplaceView.swift")
-        ))
-        reloader.install()
-        return reloader
-    }()
+    static let reloader = StandaloneReloader(monitoredSwiftFile: Env.shared.estimatedHomeDir!
+            .appendingPathComponent("projects/github/SwiftHotReload")
+            .appendingPathComponent("Example/ReplaceView.swift")
+    )
 #endif
     
     var body: some Scene {
