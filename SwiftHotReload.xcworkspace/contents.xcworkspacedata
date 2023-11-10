@@ -19,4 +19,7 @@
    <FileRef
       location = "group:Example/SwiftHotReloadExample.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:FrameworkTarget/../BuildHelper/BuildHelper.xcodeproj">
+   </FileRef>
 </Workspace>

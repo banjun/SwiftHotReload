@@ -16,10 +16,10 @@ final actor FileMonitor {
 
     private var lastTargetFileContent: String?
 
-    init(file: URL, platformName: String) {
+    init(file: URL) {
         self.file = file
 
-        guard platformName != "iphoneos" else {
+        guard Env.shared.DTPlatformName != "iphoneos" else {
             NSLog("%@", "🍓 ⚠️ To do hot reloads, the process host should be able to execute swiftc. cancelled installing the file monitor. ⚠️")
             return
         }

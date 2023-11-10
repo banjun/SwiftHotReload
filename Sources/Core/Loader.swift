@@ -17,6 +17,7 @@ final actor Loader {
                 NSLog("%@", "🍓 possible workarounds: remove `private` from the func, or add `-Xfrontend -enable-private-imports` to OTHER_SWIFT_FLAGS of the module to be overridden")
                 throw Error.symbol_not_found_in_flat_namespace(error)
             }
+            // TODO: code signature invalid: on device dylibs needs to be signed by Individual or Company identity (it cannot be verified by Personal nor Enterprise identity. see `amfid` process message on the device console)
             throw Error.unknown(error)
         }
     }

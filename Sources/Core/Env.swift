@@ -1,7 +1,7 @@
 #if DEBUG
 import Foundation
 
-public struct Env: Codable {
+public struct Env: Codable, Equatable {
     public static let shared: Env = .init()
 
     /// /Users/username
@@ -10,7 +10,7 @@ public struct Env: Codable {
     }
     /// /Users/username/Library/Developer/Xcode/DerivedData/app-abcdefg0123456789/Build/Products/Debug-iphonesimulator
     var estimatedBuilProductsDir: [URL] {
-        DYLD_FRAMEWORK_PATH.map(URL.init(fileURLWithPath:))
+        DYLD_FRAMEWORK_PATH.filter {!$0.isEmpty}.map(URL.init(fileURLWithPath:))
         + [(__XPC_DYLD_FRAMEWORK_PATH ?? __XPC_DYLD_LIBRARY_PATH ?? __XCODE_BUILT_PRODUCTS_DIR_PATHS ?? __XPC_DYLD_LIBRARY_PATH ?? PWD).map(URL.init(fileURLWithPath:))].compactMap {$0}
     }
     /// /Users/username/Library/Developer/Xcode/DerivedData
@@ -60,6 +60,7 @@ public struct Env: Codable {
                 .reversed().drop {$0 != "Platforms"}.dropFirst().reversed()
                 .joined(separator: "/")
         }).map(URL.init(fileURLWithPath:))
+        ?? (self != .shared ? Env.shared.estimatedDeveloperDir : nil) // on iphoneos, developer dir is not available in env. use host env typically on macOS build helper
     }
     /// /Applications/Xcode1501.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator17.0.sdk
     public var estimatedSDK: URL? {
