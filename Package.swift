@@ -13,14 +13,12 @@ let package = Package(
         .target(
             name: "SwiftHotReload",
             path: "Sources",
-            sources: ["Core", "StandaloneReloader", "ProxyReloader"],
             swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),
         .executableTarget(
             name: "BuildHelper",
             dependencies: ["SwiftHotReload"],
-            path: "Sources",
-            sources: ["BuildHelper"]
+            path: "BuildHelper/Sources"
         ),
         .testTarget(name: "SwiftHotReloadTests", dependencies: ["SwiftHotReload"]),
     ]
