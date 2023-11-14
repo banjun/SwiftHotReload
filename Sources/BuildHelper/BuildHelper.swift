@@ -55,6 +55,15 @@ public final class BuildHelper: ObservableObject {
         init() {}
 
         func setRuntimePeer(_ runtimePeer: RuntimePeer?) {
+            var runtimePeer = runtimePeer
+            if let p = runtimePeer?.builderParams {
+                let identity = p.env.estimatedProductBundlePath.filter { FileManager.default.fileExists(atPath: $0.path) }.lazy.compactMap {
+                    let stderr = try? NSTaskCommand(launchPath: "/usr/bin/codesign", args: ["-dvvvvv", $0.path]).run().stderr
+                    // extract `Apple Development: xxxxxx@xxxxxx (XXXXXXXXXX)`
+                    return stderr?.components(separatedBy: "\n").first { $0.hasPrefix("Authority=") }?.split(separator: "=", maxSplits: 2).last
+                }.map(String.init).first
+                runtimePeer?.builderParams?.codesignIdentity = identity
+            }
             self.runtimePeer = runtimePeer
         }
 
@@ -62,7 +71,7 @@ public final class BuildHelper: ObservableObject {
             guard let builder else { throw Error.builderUninitialized }
             counter += 1
 
-            let dylibPath = try await builder.build(dylibFilename: "HotReload\(counter).dylib", codesignIdentity: "Apple Development: ..... ..... (..........)") // FIXME: hardcoded identity
+            let dylibPath = try await builder.build(dylibFilename: "HotReload\(counter).dylib")
             guard let session = runtimePeer?.session, let server = runtimePeer?.peerID else { return }
             try await withCheckedThrowingContinuation { (c: CheckedContinuation<Void, Swift.Error>) in
                 session.sendResource(at: dylibPath, withName: dylibPath.lastPathComponent, toPeer: server) { error in

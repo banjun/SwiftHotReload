@@ -12,7 +12,7 @@ struct BuildHelperApp: App {
     @ObservedObject private(set) var buildHelper = BuildHelper()
 
     var body: some Scene {
-        WindowGroup {
+        Window("BuildHelper (\(String(ProcessInfo().processIdentifier)))", id: "Main") {
             ContentView()
                 .environmentObject(buildHelper)
         }

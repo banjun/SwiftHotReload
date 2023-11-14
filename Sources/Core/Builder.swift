@@ -13,6 +13,7 @@ public final actor Builder {
     private let sdk: URL?
     private let arch: String
     private let platformName: String
+    private let codesignIdentity: String?
 
     public struct InputParameters: Codable {
         public var targetSwiftFile: URL
@@ -26,8 +27,9 @@ public final actor Builder {
         public var targetTriple: String?
         public var sdk: URL?
         public var platformName: String?
+        public var codesignIdentity: String?
 
-        public init(targetSwiftFile: URL, env: Env = .shared, derivedData: URL? = nil, confBuildDirAppRandomString: String? = nil, mainModule: String? = nil, modules: [String] = [], configurationPlatform: String? = nil, arch: String? = nil, targetTriple: String? = nil, sdk: URL? = nil, platformName: String? = nil) {
+        public init(targetSwiftFile: URL, env: Env = .shared, derivedData: URL? = nil, confBuildDirAppRandomString: String? = nil, mainModule: String? = nil, modules: [String] = [], configurationPlatform: String? = nil, arch: String? = nil, targetTriple: String? = nil, sdk: URL? = nil, platformName: String? = nil, codesignIdentity: String? = nil) {
             self.targetSwiftFile = targetSwiftFile
             self.env = env
             self.derivedData = derivedData
@@ -39,6 +41,7 @@ public final actor Builder {
             self.targetTriple = targetTriple
             self.sdk = sdk
             self.platformName = platformName
+            self.codesignIdentity = codesignIdentity
         }
     }
 
@@ -84,9 +87,10 @@ public final actor Builder {
         self.targetTriple = p.targetTriple ?? p.env.estimatedTargetTriple!
         self.sdk = p.sdk ?? p.env.estimatedSDK ?? Env.shared.estimatedSDK
         self.platformName = p.platformName ?? p.env.DTPlatformName!
+        self.codesignIdentity = p.codesignIdentity
     }
 
-    func build(dylibFilename: String, codesignIdentity: String? = nil) throws -> URL {
+    func build(dylibFilename: String) throws -> URL {
         let dylibPath = buildDir.appendingPathComponent(dylibFilename)
         try build(dylibPath: dylibPath)
         if let codesignIdentity {
@@ -127,7 +131,7 @@ public final actor Builder {
                 headerMaps.flatMap { ["-Xcc", "-I", "-Xcc", $0.path] }
             ].flatMap { $0 })
 
-        NSLog("%@", "🍓 exec and args = ")
+        NSLog("%@", "🍓 build: exec and args = ")
         print("\(command.launchPath) \(command.args.joined(separator: " "))")
         
         try command.run()
@@ -143,7 +147,10 @@ public final actor Builder {
         let command = NSTaskCommand(launchPath: "/usr/bin/codesign", args: [
             "-f", "-s", codesignIdentity, dylibPath.path
         ])
-        try command.run()
+        NSLog("%@", "🍓 codesign: exec and args = ")
+        print("\(command.launchPath) \(command.args.joined(separator: " "))")
+        let outputs = try command.run()
+        print(outputs)
     }
 }
 

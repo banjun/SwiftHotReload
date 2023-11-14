@@ -95,6 +95,11 @@ public struct Env: Codable, Equatable {
         "x86_64"
 #endif
     }
+    /// Product app bundle on host
+    public var estimatedProductBundlePath: [URL] {
+        guard let CFBundleName else { return [] }
+        return estimatedBuilProductsDir.map { $0.appendingPathComponent(CFBundleName).appendingPathExtension("app") }
+    }
 
     // Environment Variables
     var SIMULATOR_HOST_HOME: String?
@@ -118,6 +123,7 @@ public struct Env: Codable, Equatable {
     var LSMinimumSystemVersion: String?
     var CFBundleExecutable: String?
     var CFBundleIdentifier: String?
+    var CFBundleName: String?
 
     private init() {
         let env = ProcessInfo().environment
@@ -142,6 +148,7 @@ public struct Env: Codable, Equatable {
         LSMinimumSystemVersion = info["LSMinimumSystemVersion"] as? String
         CFBundleExecutable = info["CFBundleExecutable"] as? String
         CFBundleIdentifier = info["CFBundleIdentifier"] as? String
+        CFBundleName = info["CFBundleName"] as? String
     }
 }
 #endif
