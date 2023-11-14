@@ -1,3 +1,4 @@
+#if DEBUG || os(macOS)
 import Foundation
 
 enum MultipeerConnectivityConstants {
@@ -11,3 +12,4 @@ enum MultipeerConnectivityConstants {
     static let serviceType = "swifthotreload"
     static let serverDiscoveryInfo: [String: String] = ["SwiftHotReloadServer": "1"]
 }
+#endif

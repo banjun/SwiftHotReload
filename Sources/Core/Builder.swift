@@ -1,4 +1,4 @@
-#if DEBUG
+#if DEBUG || os(macOS)
 import Foundation
 
 public final actor Builder {

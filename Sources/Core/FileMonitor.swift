@@ -1,4 +1,4 @@
-#if DEBUG
+#if DEBUG || os(macOS)
 import Foundation
 
 final actor FileMonitor {
@@ -30,6 +30,7 @@ final actor FileMonitor {
     }
 
     private func install() {
+        NSLog("%@", "🍓 \(#function) starting file monitor for file at \(file.path)")
         let handle = FileHandle(forReadingAtPath: file.path)
         monitor = handle.map { DispatchSource.makeFileSystemObjectSource(fileDescriptor: $0.fileDescriptor, eventMask: .all) }
         monitor?.setEventHandler { [unowned self] in

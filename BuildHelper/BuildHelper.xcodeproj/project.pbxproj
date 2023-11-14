@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		63A7469A2AFDD742003FA3AC /* BuildHelperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A746992AFDD742003FA3AC /* BuildHelperApp.swift */; };
-		63A7469C2AFDD742003FA3AC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A7469B2AFDD742003FA3AC /* ContentView.swift */; };
+		63599A3E2B03A121009186F4 /* BuildHelperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63599A3B2B03A121009186F4 /* BuildHelperApp.swift */; };
+		63599A3F2B03A121009186F4 /* ProxyBlowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63599A3C2B03A121009186F4 /* ProxyBlowser.swift */; };
+		63599A402B03A121009186F4 /* BuildHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63599A3D2B03A121009186F4 /* BuildHelper.swift */; };
 		63A7469E2AFDD748003FA3AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63A7469D2AFDD748003FA3AC /* Assets.xcassets */; };
 		63A746A12AFDD748003FA3AC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63A746A02AFDD748003FA3AC /* Preview Assets.xcassets */; };
 		63A746B12AFDD8F4003FA3AC /* SwiftHotReload.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63A746B02AFDD8F4003FA3AC /* SwiftHotReload.framework */; };
@@ -30,9 +31,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		63599A3B2B03A121009186F4 /* BuildHelperApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildHelperApp.swift; sourceTree = "<group>"; };
+		63599A3C2B03A121009186F4 /* ProxyBlowser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProxyBlowser.swift; sourceTree = "<group>"; };
+		63599A3D2B03A121009186F4 /* BuildHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildHelper.swift; sourceTree = "<group>"; };
 		63A746962AFDD742003FA3AC /* BuildHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BuildHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		63A746992AFDD742003FA3AC /* BuildHelperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildHelperApp.swift; sourceTree = "<group>"; };
-		63A7469B2AFDD742003FA3AC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		63A7469D2AFDD748003FA3AC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		63A746A02AFDD748003FA3AC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		63A746A22AFDD748003FA3AC /* BuildHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BuildHelper.entitlements; sourceTree = "<group>"; };
@@ -52,12 +54,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		63599A3A2B03A121009186F4 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				63599A3B2B03A121009186F4 /* BuildHelperApp.swift */,
+				63599A3C2B03A121009186F4 /* ProxyBlowser.swift */,
+				63599A3D2B03A121009186F4 /* BuildHelper.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
 		63A7468D2AFDD742003FA3AC = {
 			isa = PBXGroup;
 			children = (
 				63A746AE2AFDD7DC003FA3AC /* Info.plist */,
-				63A746992AFDD742003FA3AC /* BuildHelperApp.swift */,
-				63A7469B2AFDD742003FA3AC /* ContentView.swift */,
+				63599A3A2B03A121009186F4 /* Sources */,
 				63A7469D2AFDD748003FA3AC /* Assets.xcassets */,
 				63A746A22AFDD748003FA3AC /* BuildHelper.entitlements */,
 				63A7469F2AFDD748003FA3AC /* Preview Content */,
@@ -161,8 +172,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63A7469C2AFDD742003FA3AC /* ContentView.swift in Sources */,
-				63A7469A2AFDD742003FA3AC /* BuildHelperApp.swift in Sources */,
+				63599A3E2B03A121009186F4 /* BuildHelperApp.swift in Sources */,
+				63599A402B03A121009186F4 /* BuildHelper.swift in Sources */,
+				63599A3F2B03A121009186F4 /* ProxyBlowser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -4,6 +4,7 @@
 // TODO: BuildHelper may be separated into sub- spec/package
 import Foundation
 import MultipeerConnectivity
+@testable import SwiftHotReload // NOTE: use internal methods. SPM does not allow overlapping sources for a single Package.swift
 
 final actor ProxyBrowser {
     @Published private(set) var runtimePeer: RuntimePeer? {
@@ -16,8 +17,8 @@ final actor ProxyBrowser {
     private let browserDelegate: BrowserDelegate
     private let sessionDelegate: SessionDelegate = .init()
 
-    init(hostName: String = ProcessInfo().hostName, bundleID: String = Env.shared.CFBundleIdentifier!, processID: Int32 = ProcessInfo().processIdentifier) {
-        let displayName = String("Client[\(hostName)] \(bundleID)(\(processID))".utf8.prefix(63))!
+    init(hostName: String = ProcessInfo().hostName, bundleID: String? = Env.shared.CFBundleIdentifier, processID: Int32 = ProcessInfo().processIdentifier) {
+        let displayName = String("Client[\(hostName)] \(bundleID ?? "cli")(\(processID))".utf8.prefix(63))!
         self.peerID = MCPeerID(displayName: displayName)
         self.browser = MCNearbyServiceBrowser(peer: peerID, serviceType: MultipeerConnectivityConstants.serviceType)
         self.browserDelegate = BrowserDelegate()
@@ -112,10 +113,12 @@ final actor ProxyBrowser {
     // MARK: -
 
     func start() {
+        NSLog("%@", "🍓 ProxyBrowser.\(#function)")
         browser.startBrowsingForPeers()
     }
 
     func stop() {
+        NSLog("%@", "🍓 ProxyBrowser.\(#function)")
         browser.stopBrowsingForPeers()
     }
 }

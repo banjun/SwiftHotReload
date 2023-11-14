@@ -1,4 +1,5 @@
 #if os(macOS)
+@testable import SwiftHotReload // NOTE: use internal methods. SPM does not allow overlapping sources for a single Package.swift
 // NOTE: should not be submitted for App Store Review
 // Release build is not disabled as BuildHelper.app is to be buildable for generating a mac helper app.
 // TODO: BuildHelper may be separated into sub- spec/package
