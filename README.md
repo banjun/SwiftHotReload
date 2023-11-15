@@ -11,8 +11,17 @@ SwiftHotReload is an experimental project. We investigate a real world applicati
 
 * Xcode 15.x
 * Host macOS 13.x, 14.x
-* Runtime macOS app
-* Runtime simulators for iOS, iPadOS, and possibly visionOS
+
+We can use either Standalone Reloader or Proxy Reloader. Standalone Reloader runs all required tasks on the runtime target process. Proxy Reloader runs on the runtime target process and receives dylibs from BuildHelper via network. BuildHelper runs on the host Mac and monitors file changes to build the file and send dylibs to Proxy on the target.
+
+| Runtime Target App            | Standalone | Proxy & BuildHelper |    
+|-------------------------------|------------|---------------------|
+| iOS app on Simulator          | ✅         | ✅ |
+| iOS app on Device             | ❌         | ✅ (codesign with Individual, Company or Enterprise ADP) |
+| macOS app (App Sandbox = NO)  | ✅         | ✅ |
+| macOS app (App Sandbox = YES) | ❌         | ❌ |
+| macOS app (Designed for iPad) | ❌         | ❌ |
+
 
 ## Features
 
@@ -24,11 +33,10 @@ SwiftHotReload is an experimental project. We investigate a real world applicati
    * SPM project structures
    * CocoaPods project structures
 * Update trigger for SwiftUI views
+* Helper app on host & Reload on devices
 
 ### TODOs (not yet implemented, nice to have)
 
-* Helper app on host
-* Reload on devices
 * Less invasive: be easy to adopt & compatible for App Store submission
     * Build settings (-Xfrontend ...)
     * Sandbox restrictions for macOS app
@@ -38,7 +46,6 @@ SwiftHotReload is an experimental project. We investigate a real world applicati
 ## How to use the Example app
 
 * Open `SwiftHotReload.xcworkspace`
-* Modify `targetSwiftFile:` file path to along with your path in `App.swift`
 * Run `SwiftHotReloadExample` on Mac or any simulators
 * Edit `ReplaceView.swift` and save
 
@@ -66,17 +73,28 @@ Set up app as described below and build & run on a supported platform.
 
 ```swift
 extension App {
-    static let reloader = StandaloneReloader(
+    static let reloader = StandaloneReloader(monitoredSwiftFile: URL(fileURLWithPath: #filePath).deletingLastPathComponent()
         // file path to be monitored
-        monitoredSwiftFile: Env.shared.estimatedHomeDir!
-            .appendingPathComponent("path_to_project/RuntimeOverrides.swift")
-    )
+        .appendingPathComponent("RuntimeOverrides.swift")
     :        
     _ = App.reloader // use to load the lazy static property above and start a file monitor
 }
 ```
 
-### Disable sandbox (only required for macOS app target):
+### (on iOS Device) Use ProxyReloader & BuildHelper
+
+If the app is for iOS Device, use `ProxyReloader` instead of `StandaloneReloader`. Run BuildHelper separately on the host Mac:
+
+```
+git clone https://github.com/banjun/SwiftHotReload.git
+cd SwiftHotReload
+
+swift run BuildHelper -c debug
+```
+
+Alternatively to `swift run`, we can run BuildHelper as an app (not CLI) using BuildHelper target on SwiftHotReload.xcworkspace.
+
+### (only required for macOS app target) Disable App Sandbox:
 
 Modify the app entitlements file:
 
@@ -84,13 +102,20 @@ Modify the app entitlements file:
 App Sandbox = NO
 ```
 
-### (Optionally but recommended) set build settings:
+### (optional but recommended) Set build settings:
 
 * Add to `OTHER_SWIFT_FLAGS` of the app target
     * `-Xfrontend` `-enable-implicit-dynamic`
         * use the flag instead of explicitly marking `dynamic` before `func`s or `var`s
     * `-Xfrontend` `-enable-private-imports`
         * use the flag instead of making related  `func`s or `var`s visible by removing `private`
+
+
+### (optional) Insert hooks to update SwiftUI view after reloadings:
+
+```swift
+@ObservedObject private var reloader = App.reloader
+```
 
 ### Create `path_to_project/RuntimeOverrides.swift`:
 
@@ -106,11 +131,3 @@ extension ContentView { // <- typically use extension for a type containing func
     }
 } 
 ```
-
-### (Optionally) to update SwiftUI view after reloadings:
-
-```swift
-@ObservedObject private var reloader = App.reloader
-```
-
-
