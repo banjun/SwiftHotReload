@@ -37,6 +37,8 @@ struct BuildHelperApp: SwiftUI.App {
 
                 Text("Date Reloaded" + "\n" + (buildHelper.dateReloaded?.formatted(date: .numeric, time: .complete) ?? "Never"))
                     .multilineTextAlignment(.center)
+
+                buildHelper.proxyBrowser.browserView
             }
             .padding()
         }

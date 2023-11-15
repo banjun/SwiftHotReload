@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		63599A3E2B03A121009186F4 /* BuildHelperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63599A3B2B03A121009186F4 /* BuildHelperApp.swift */; };
-		63599A3F2B03A121009186F4 /* ProxyBlowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63599A3C2B03A121009186F4 /* ProxyBlowser.swift */; };
+		63599A3F2B03A121009186F4 /* ProxyBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63599A3C2B03A121009186F4 /* ProxyBrowser.swift */; };
 		63599A402B03A121009186F4 /* BuildHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63599A3D2B03A121009186F4 /* BuildHelper.swift */; };
+		638083822B04D5FC00A39A64 /* MCBrowserViewControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638083812B04D5FC00A39A64 /* MCBrowserViewControllerView.swift */; };
 		63A7469E2AFDD748003FA3AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63A7469D2AFDD748003FA3AC /* Assets.xcassets */; };
 		63A746A12AFDD748003FA3AC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63A746A02AFDD748003FA3AC /* Preview Assets.xcassets */; };
 		63A746B12AFDD8F4003FA3AC /* SwiftHotReload.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63A746B02AFDD8F4003FA3AC /* SwiftHotReload.framework */; };
@@ -32,8 +33,9 @@
 
 /* Begin PBXFileReference section */
 		63599A3B2B03A121009186F4 /* BuildHelperApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildHelperApp.swift; sourceTree = "<group>"; };
-		63599A3C2B03A121009186F4 /* ProxyBlowser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProxyBlowser.swift; sourceTree = "<group>"; };
+		63599A3C2B03A121009186F4 /* ProxyBrowser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProxyBrowser.swift; sourceTree = "<group>"; };
 		63599A3D2B03A121009186F4 /* BuildHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildHelper.swift; sourceTree = "<group>"; };
+		638083812B04D5FC00A39A64 /* MCBrowserViewControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCBrowserViewControllerView.swift; sourceTree = "<group>"; };
 		63A746962AFDD742003FA3AC /* BuildHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BuildHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63A7469D2AFDD748003FA3AC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		63A746A02AFDD748003FA3AC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -58,7 +60,8 @@
 			isa = PBXGroup;
 			children = (
 				63599A3B2B03A121009186F4 /* BuildHelperApp.swift */,
-				63599A3C2B03A121009186F4 /* ProxyBlowser.swift */,
+				63599A3C2B03A121009186F4 /* ProxyBrowser.swift */,
+				638083812B04D5FC00A39A64 /* MCBrowserViewControllerView.swift */,
 				63599A3D2B03A121009186F4 /* BuildHelper.swift */,
 			);
 			path = Sources;
@@ -174,7 +177,8 @@
 			files = (
 				63599A3E2B03A121009186F4 /* BuildHelperApp.swift in Sources */,
 				63599A402B03A121009186F4 /* BuildHelper.swift in Sources */,
-				63599A3F2B03A121009186F4 /* ProxyBlowser.swift in Sources */,
+				638083822B04D5FC00A39A64 /* MCBrowserViewControllerView.swift in Sources */,
+				63599A3F2B03A121009186F4 /* ProxyBrowser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,6 +12,7 @@ final actor Proxy {
     private let advertiser: MCNearbyServiceAdvertiser
     private var session: MCSession? {
         didSet {
+            oldValue?.disconnect()
             session?.delegate = sessionDelegate
         }
     }
@@ -26,7 +27,7 @@ final actor Proxy {
     init(hostName: String = ProcessInfo().hostName, bundleID: String = Env.shared.CFBundleIdentifier!, processID: Int32 = ProcessInfo().processIdentifier, builderParams: Builder.InputParameters) {
         self.builderParams = builderParams
         // the doc: The display name is intended for use in UI elements, and should be short and descriptive of the local peer. The maximum allowable length is 63 bytes in UTF-8 encoding. The displayName parameter may not be nil or an empty string.
-        let displayName = String("Server[\(hostName)] \(bundleID)(\(processID))".utf8.prefix(63))!
+        let displayName = String("\(hostName) \(bundleID)(\(processID))".utf8.prefix(63))!
         self.peerID = MCPeerID(displayName: displayName)
         self.advertiser = MCNearbyServiceAdvertiser(peer: peerID, discoveryInfo: MultipeerConnectivityConstants.serverDiscoveryInfo, serviceType: MultipeerConnectivityConstants.serviceType)
         self.advertiserDelegate = AdvertiserDelegate()
@@ -47,7 +48,7 @@ final actor Proxy {
 
     func stop() {
         advertiser.stopAdvertisingPeer()
-        session?.disconnect()
+        session = nil
     }
 
     // MARK: - MCNearbyServiceAdvertiserDelegate
@@ -67,7 +68,10 @@ final actor Proxy {
 
     private func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         NSLog("%@", "🍓 \(#function) advertiser = \(advertiser), peerID = \(peerID), context = \(context?.count ?? 0) bytes")
-        guard session == nil else { return }
+        guard session == nil else {
+            NSLog("%@", "🍓 \(#function) ignored additional session")
+            return
+        }
 
         let session = MCSession(peer: self.peerID, securityIdentity: nil, encryptionPreference: .required)
         self.session = session
@@ -111,10 +115,12 @@ final actor Proxy {
 
     private func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
-        case .notConnected: break
+        case .notConnected:
+            self.session = nil
         case .connecting: break
         case .connected:
             do {
+                NSLog("%@", "🍓 \(#function) connected: sending builderParams = \(builderParams)")
                 let payload = try JSONEncoder().encode(builderParams)
                 try self.session?.send(payload, toPeers: [peerID], with: .reliable)
             } catch {

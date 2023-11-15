@@ -7,7 +7,7 @@ import Foundation
 import Combine
 
 public final class BuildHelper: ObservableObject {
-    private let proxyBrowser = ProxyBrowser()
+    let proxyBrowser = ProxyBrowser()
 
     @Published public private(set) var monitoredFile: URL? {
         didSet {
@@ -31,8 +31,11 @@ public final class BuildHelper: ObservableObject {
 
     public init() {
         Task { @MainActor in
-            await proxyBrowser.$runtimePeer.receive(on: DispatchQueue.main).sink { [weak self] runtimePeer in
+            await proxyBrowser.$runtimePeers.receive(on: DispatchQueue.main).sink { [weak self] runtimePeers in
                 guard let self else { return }
+                // TODO: support multiple peers
+                let runtimePeer = runtimePeers.first
+                NSLog("%@", "🍓 TODO: support multiple peers: \(runtimePeers.count) peers connected. currently using only first peer \(String(describing: runtimePeer))")
                 monitoredFile = runtimePeer?.builderParams?.targetSwiftFile
                 Task { await self.core.setRuntimePeer(runtimePeer) }
             }.store(in: &cancellables)
