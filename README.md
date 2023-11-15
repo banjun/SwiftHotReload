@@ -19,8 +19,8 @@ We can use either Standalone Reloader or Proxy Reloader. Standalone Reloader run
 | iOS app on Simulator          | ✅         | ✅ |
 | iOS app on Device             | ❌         | ✅ (codesign with Individual, Company or Enterprise ADP) |
 | macOS app (App Sandbox = NO)  | ✅         | ✅ |
-| macOS app (App Sandbox = YES) | ❌         | ❌ |
-| macOS app (Designed for iPad) | ❌         | ❌ |
+| macOS app (App Sandbox = YES) | ❌         | ❌ (codesign cannot be trusted to load) |
+| macOS app (Designed for iPad) | ❌         | ❌ (codesign cannot be trusted to load) |
 
 
 ## Features
