@@ -5,6 +5,7 @@ final actor Loader {
     enum Error: Swift.Error {
         case symbol_not_found_in_flat_namespace(String)
         case code_signature_invalid(String)
+        case system_policy(String)
         case unknown(String)
     }
 
@@ -21,6 +22,10 @@ final actor Loader {
             if error.contains("code signature invalid") {
                 NSLog("%@", "🍓 code signature invalid: on device dylibs needs to be signed by Individual, Company or Enterprise identity (it cannot be verified by Personal identity. see `amfid` process message on the device console)")
                 throw Error.code_signature_invalid(error)
+            }
+            if error.contains("library load disallowed by system policy") {
+                NSLog("%@", "🍓 possible workarounds: turn off App Sandbox")
+                throw Error.system_policy(error)
             }
             throw Error.unknown(error)
         }
