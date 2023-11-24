@@ -18,6 +18,7 @@
 		63A746BA2AFE0286003FA3AC /* RuntimePeer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A746B92AFE0286003FA3AC /* RuntimePeer.swift */; };
 		63A746BC2AFE02EA003FA3AC /* Proxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A746BB2AFE02EA003FA3AC /* Proxy.swift */; };
 		63A746C12AFE0700003FA3AC /* MultipeerConnectivityConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A746C02AFE0700003FA3AC /* MultipeerConnectivityConstants.swift */; };
+		63FE42F92B107425000A950E /* UserConsent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FE42F82B107425000A950E /* UserConsent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		63A746B92AFE0286003FA3AC /* RuntimePeer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimePeer.swift; sourceTree = "<group>"; };
 		63A746BB2AFE02EA003FA3AC /* Proxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Proxy.swift; sourceTree = "<group>"; };
 		63A746C02AFE0700003FA3AC /* MultipeerConnectivityConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerConnectivityConstants.swift; sourceTree = "<group>"; };
+		63FE42F82B107425000A950E /* UserConsent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConsent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				6355B0F42AFB6899008C4C50 /* ProxyReloader.swift */,
+				63FE42F82B107425000A950E /* UserConsent.swift */,
 				63A746C02AFE0700003FA3AC /* MultipeerConnectivityConstants.swift */,
 				63A746BB2AFE02EA003FA3AC /* Proxy.swift */,
 				63A746B92AFE0286003FA3AC /* RuntimePeer.swift */,
@@ -207,6 +210,7 @@
 				6355B0F52AFB6899008C4C50 /* ProxyReloader.swift in Sources */,
 				63A746C12AFE0700003FA3AC /* MultipeerConnectivityConstants.swift in Sources */,
 				630C245F2AEBD4E10012C490 /* Env.swift in Sources */,
+				63FE42F92B107425000A950E /* UserConsent.swift in Sources */,
 				63458ABF2AFA6232001A5630 /* Loader.swift in Sources */,
 				63458AC32AFA6247001A5630 /* Builder.swift in Sources */,
 			);

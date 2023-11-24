@@ -5,6 +5,8 @@ import MultipeerConnectivity
 final actor Proxy {
     private let loader: Loader = .init()
     @Published private(set) var receivedDylibFiles: [URL] = []
+    private var shouldConnectToBuilder: (_ title: String, _ message: String) async -> Bool
+    func setShouldConnectToBuilder(_ shouldConnectToBuilder: @escaping (String, String) async -> Bool) { self.shouldConnectToBuilder = shouldConnectToBuilder }
 
     private let builderParams: Builder.InputParameters
 
@@ -24,8 +26,9 @@ final actor Proxy {
         case fileAlreadyExists(String)
     }
 
-    init(hostName: String = ProcessInfo().hostName, bundleID: String = Env.shared.CFBundleIdentifier!, processID: Int32 = ProcessInfo().processIdentifier, builderParams: Builder.InputParameters) {
+    init(hostName: String = ProcessInfo().hostName, bundleID: String = Env.shared.CFBundleIdentifier!, processID: Int32 = ProcessInfo().processIdentifier, builderParams: Builder.InputParameters, shouldConnectToBuilder: @escaping (_ title: String, _ message: String) async -> Bool) {
         self.builderParams = builderParams
+        self.shouldConnectToBuilder = shouldConnectToBuilder
         // the doc: The display name is intended for use in UI elements, and should be short and descriptive of the local peer. The maximum allowable length is 63 bytes in UTF-8 encoding. The displayName parameter may not be nil or an empty string.
         let displayName = String("\(hostName) \(bundleID)(\(processID))".utf8.prefix(63))!
         self.peerID = MCPeerID(displayName: displayName)
@@ -73,11 +76,13 @@ final actor Proxy {
             return
         }
 
-        let session = MCSession(peer: self.peerID, securityIdentity: nil, encryptionPreference: .required)
-        self.session = session
-
-        NSLog("%@", "🍓 \(#function) ⚠️ TODO: some auth to refrain from loading dylibs sent from the unidentified build helper")
-        invitationHandler(true, session) // TODO: some auth
+        Task {
+            let trusted = await shouldConnectToBuilder("⚠️ Connect to a Builder \(peerID)?", "SwiftHotReload loads any code from the Builder")
+            if trusted {
+                self.session = MCSession(peer: self.peerID, securityIdentity: nil, encryptionPreference: .required)
+            }
+            invitationHandler(trusted, self.session)
+        }
     }
 
     private func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Swift.Error) {
