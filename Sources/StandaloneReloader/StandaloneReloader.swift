@@ -1,4 +1,4 @@
-#if DEBUG
+#if DEBUG || os(macOS)
 import Foundation
 import Combine
 
@@ -14,8 +14,8 @@ public final class StandaloneReloader: ObservableObject {
             NSLog("%@", "🍓 ⚠️ To do hot reloads standalone, the process host should be able to execute swiftc. ⚠️")
         }
 
-        fileMonitor = .init(file: monitoredSwiftFile, platformName: platformName ?? env.DTPlatformName!)
-        core = .init(builder: .init(targetSwiftFile: monitoredSwiftFile, env: env, derivedData: derivedData, confBuildDirAppRandomString: confBuildDirAppRandomString, mainModule: mainModule, modules: modules, configurationPlatform: configurationPlatform, arch: arch, targetTriple: targetTriple, sdk: sdk, platformName: platformName), loader: .init())
+        fileMonitor = .init(file: monitoredSwiftFile)
+        core = .init(builder: .init(.init(targetSwiftFile: monitoredSwiftFile, env: env, derivedData: derivedData, confBuildDirAppRandomString: confBuildDirAppRandomString, mainModule: mainModule, modules: modules, configurationPlatform: configurationPlatform, arch: arch, targetTriple: targetTriple, sdk: sdk, platformName: platformName)), loader: .init())
 
         Task {
             await fileMonitor.$fileChanges.compactMap {$0}.sink { [weak self] _ in

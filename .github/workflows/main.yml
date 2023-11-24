@@ -8,19 +8,26 @@ on:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        configuration: ['debug', 'release']
     runs-on: macOS-13
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: '^15.0.1'
-    - uses: actions/checkout@v2
-    - run: swift build
+    - uses: actions/checkout@v4
+    - run: swift build -c ${{ matrix.configuration }} -Xswiftc -enable-testing
   podspec:
+    strategy:
+      matrix:
+        configuration: ['Debug', 'Release']
+        platform: ['ios', 'macos']
     runs-on: macOS-13
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: '^15.0.1'
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - run: bundle install
-    - run: bundle exec pod lib lint
+    - run: bundle exec pod lib lint --platforms=${{ matrix.platform }} --configuration=${{ matrix.configuration }}
