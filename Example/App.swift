@@ -1,10 +1,3 @@
-//
-//  SwiftHotReloadExampleApp.swift
-//  SwiftHotReloadExample
-//
-//  Created by BAN Jun on 2023/10/26.
-//
-
 import SwiftUI
 import SwiftHotReload
 
@@ -12,20 +5,28 @@ import SwiftHotReload
 
 @main
 struct App: SwiftUI.App {
-
 #if DEBUG
-    // see also ReplaceView.swift
-    static let reloader: Reloader = {
-        let reloader = Reloader(.init(
-            targetSwiftFile: Env.shared.estimatedHomeDir!
-                .appendingPathComponent("projects/github/SwiftHotReload")
-                .appendingPathComponent("Example/ReplaceView.swift")
-        ))
-        reloader.install()
-        return reloader
-    }()
+    // For Simulators and macOS apps:
+    // just use StandaloneReloader
+    //
+    // For iPhone devices:
+    // use ProxyReloader while running BuildHelper.app on the host Mac
+    //
+    // See also `ReplaceView.swift`
+    //
+    // ↓ Change true/false to switch StandaloneReloader or ProxyReloader
+#if true
+    // StandaloneReloader
+    static let reloader = StandaloneReloader(monitoredSwiftFile: URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+        .appendingPathComponent("ReplaceView.swift")
+    )
+#else
+    // ProxyReloader
+    static let reloader = ProxyReloader(.init(targetSwiftFile: URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+        .appendingPathComponent("ReplaceView.swift")
+    ))
 #endif
-    
+#endif
     var body: some Scene {
         WindowGroup {
             ContentView()

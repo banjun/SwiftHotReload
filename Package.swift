@@ -10,7 +10,16 @@ let package = Package(
         .library(name: "SwiftHotReload", targets: ["SwiftHotReload"]),
     ],
     targets: [
-        .target(name: "SwiftHotReload"),
+        .target(
+            name: "SwiftHotReload",
+            path: "Sources",
+            swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
+        ),
+        .executableTarget(
+            name: "BuildHelper",
+            dependencies: ["SwiftHotReload"],
+            path: "BuildHelper/Sources"
+        ),
         .testTarget(name: "SwiftHotReloadTests", dependencies: ["SwiftHotReload"]),
     ]
 )

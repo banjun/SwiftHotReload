@@ -5,6 +5,16 @@
       location = "group:Package.swift">
    </FileRef>
    <FileRef
+      location = "group:SwiftHotReload.podspec"
+      assignedFileDataType = "public.ruby-script">
+   </FileRef>
+   <FileRef
+      location = "group:.github/workflows">
+   </FileRef>
+   <FileRef
+      location = "group:README.md">
+   </FileRef>
+   <FileRef
       location = "container:Sources">
    </FileRef>
    <FileRef
@@ -15,5 +25,8 @@
    </FileRef>
    <FileRef
       location = "group:Example/SwiftHotReloadExample.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:FrameworkTarget/../BuildHelper/BuildHelper.xcodeproj">
    </FileRef>
 </Workspace>
