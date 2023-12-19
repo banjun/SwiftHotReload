@@ -46,22 +46,31 @@ public final actor Builder {
     }
 
     enum Error: Swift.Error {
+        case missingRequiredEnvironments(String?)
         case cannotBuildOnRuntime(String?)
         case noSuchFile(URL)
         case swiftcFailure(Int?)
     }
 
-    init(_ p: InputParameters) {
+    init(_ p: InputParameters) throws {
         self.targetSwiftFile = p.targetSwiftFile
-        let derivedData = p.derivedData ?? p.env.estimataedDerivedData!
+        guard let derivedData = p.derivedData ?? p.env.estimataedDerivedData else {
+            throw Error.missingRequiredEnvironments("derivedData")
+        }
         self.derivedData = derivedData
         self.moduleCachePath = derivedData.appendingPathComponent("ModuleCache.noindex")
-        let confBuildDirAppRandomString = p.confBuildDirAppRandomString ?? p.env.estimatedConfigurationBuildRandomString!
-        let mainModule = p.mainModule ?? p.env.estimatedMainModule!
+        guard let confBuildDirAppRandomString = p.confBuildDirAppRandomString ?? p.env.estimatedConfigurationBuildRandomString else {
+            throw Error.missingRequiredEnvironments("confBuildDirAppRandomString")
+        }
+        guard let mainModule = p.mainModule ?? p.env.estimatedMainModule else {
+            throw Error.missingRequiredEnvironments("mainModule")
+        }
         let intermediatesDir = derivedData
             .appendingPathComponent(confBuildDirAppRandomString)
             .appendingPathComponent("Build/Intermediates.noindex")
-        let configurationPlatform = p.configurationPlatform ?? p.env.estimatedConfigurationPlatform!
+        guard let configurationPlatform = p.configurationPlatform ?? p.env.estimatedConfigurationPlatform else {
+            throw Error.missingRequiredEnvironments("configurationPlatform")
+        }
         let confBuildDir = intermediatesDir
             .appendingPathComponent(mainModule + ".build")
             .appendingPathComponent(configurationPlatform)
@@ -83,7 +92,10 @@ public final actor Builder {
             .appendingPathComponent("Pods-\(mainModule)" + ".build")
             .appendingPathComponent("Pods_\(mainModule)-project-headers.hmap")
         ]
-        self.buildDir = headerSearchPaths.first!
+        guard let buildDir = headerSearchPaths.first else {
+            throw Error.missingRequiredEnvironments("buildDir")
+        }
+        self.buildDir = buildDir
         self.targetTriple = p.targetTriple ?? p.env.estimatedTargetTriple!
         self.sdk = p.sdk ?? p.env.estimatedSDK ?? Env.shared.estimatedSDK
         self.platformName = p.platformName ?? p.env.DTPlatformName!

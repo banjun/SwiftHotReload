@@ -4,7 +4,7 @@ import Combine
 
 public final class StandaloneReloader: ObservableObject {
     private let fileMonitor: FileMonitor
-    private let core: Core
+    private let core: Core?
 
     @Published public private(set) var dateReloaded: Date?
     private var cancellables: Set<AnyCancellable> = []
@@ -15,7 +15,13 @@ public final class StandaloneReloader: ObservableObject {
         }
 
         fileMonitor = .init(file: monitoredSwiftFile)
-        core = .init(builder: .init(.init(targetSwiftFile: monitoredSwiftFile, env: env, derivedData: derivedData, confBuildDirAppRandomString: confBuildDirAppRandomString, mainModule: mainModule, modules: modules, configurationPlatform: configurationPlatform, arch: arch, targetTriple: targetTriple, sdk: sdk, platformName: platformName)), loader: .init())
+        do {
+            let builder = try Builder(.init(targetSwiftFile: monitoredSwiftFile, env: env, derivedData: derivedData, confBuildDirAppRandomString: confBuildDirAppRandomString, mainModule: mainModule, modules: modules, configurationPlatform: configurationPlatform, arch: arch, targetTriple: targetTriple, sdk: sdk, platformName: platformName))
+            core = .init(builder: builder, loader: .init())
+        } catch {
+            NSLog("%@", "🍓 ⚠️ Cannot infer build environments. hot reloads are disabled.: \(String(describing: error)) ⚠️")
+            core = nil
+        }
 
         Task {
             await fileMonitor.$fileChanges.compactMap {$0}.sink { [weak self] _ in
@@ -45,7 +51,7 @@ public final class StandaloneReloader: ObservableObject {
 
     public func reload() {
         Task { @MainActor in
-            try await core.reload()
+            try await core?.reload()
             dateReloaded = Date()
         }
     }
