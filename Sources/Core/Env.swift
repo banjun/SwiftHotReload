@@ -80,9 +80,13 @@ public struct Env: Codable, Equatable {
     /// arm64-apple-ios14.0-simulator
     /// arm64-apple-macos13.0
     public var estimatedTargetTriple: String? {
-        guard let os = (DTPlatformName?.contains("iphone") == true ? "ios"
-                        : DTPlatformName?.contains("macosx") == true ? "macos"
-                        : nil) else { return nil }
+        #if os(iOS)
+        let os = "ios"
+        #elseif os(macOS)
+        let os = "macos"
+        #elseif os(visionOS)
+        let os = "xros"
+        #endif
         let isSimulator = DTPlatformName?.contains("simulator") == true
         return [estimatedArch, "apple", os + estimatedDeploymentOSVersion!, isSimulator ? "simulator" : nil]
             .compactMap { $0 }.joined(separator: "-")
