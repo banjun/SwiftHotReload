@@ -48,7 +48,12 @@ public final class BuildHelper: ObservableObject {
         private var builder: Builder?
         private var runtimePeer: RuntimePeer? {
             didSet {
-                self.builder = runtimePeer?.builderParams.map(Builder.init)
+                do {
+                    self.builder = try runtimePeer?.builderParams.flatMap { try Builder($0) }
+                } catch {
+                    NSLog("%@", "🍓 ⚠️ Cannot infer build environments. hot reloads are disabled.: \(String(describing: error)) ⚠️")
+                    self.builder = nil
+                }
             }
         }
 
