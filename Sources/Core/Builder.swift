@@ -145,8 +145,16 @@ public final actor Builder {
 
         NSLog("%@", "🍓 build: exec and args = ")
         print("\(command.launchPath) \(command.args.joined(separator: " "))")
-        
-        try command.run()
+
+        do {
+            try command.run()
+        } catch let error as NSTaskCommand.Error {
+            if case .failureStatus(status: _, stdout: let stdout, stderr: let stderr) = error {
+                if let v = stdout, !v.isEmpty { NSLog("🍓 build stdout:"); print(v) }
+                if let v = stderr, !v.isEmpty { NSLog("🍓 build stderr:"); print(v) }
+            }
+            throw error
+        }
     }
 
     /// codesign the dylib
