@@ -11,14 +11,20 @@ struct NSTaskCommand {
     }
 
     @discardableResult
-    func run(clearEnvironments: Bool = true) throws -> (stdout: String?, stderr: String?) {
+    func run(clearEnvironments: Bool = true, setEnvHome: String? = NSHomeDirectory()) throws -> (stdout: String?, stderr: String?) {
         let NSTask: AnyClass? = NSClassFromString("NSTask")
         let task = NSTask?.value(forKey: "new") as? NSObject
         guard let task else { throw Error.nsTaskUnavailable }
 
+        var environment = task.value(forKey: "environment") as? [AnyHashable: Any] ?? [:]
         if clearEnvironments {
-            task.setValue([:], forKey: "environment")
+            environment.removeAll()
         }
+        if let setEnvHome {
+            // preserve or add HOME to avoid error: `LLVM ERROR: cannot get default cache directory`
+            environment["HOME"] = setEnvHome
+        }
+        task.setValue(environment, forKey: "environment")
 
         task.setValue(launchPath, forKey: "launchPath")
         task.setValue(args, forKey: "arguments")
