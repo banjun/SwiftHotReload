@@ -65,7 +65,7 @@ public final class BuildHelper: ObservableObject {
 
         func setRuntimePeer(_ runtimePeer: RuntimePeer?) {
             var runtimePeer = runtimePeer
-            if let p = runtimePeer?.builderParams {
+            if let p = runtimePeer?.builderParams, p.codesignIdentity == nil {
                 let identity = p.env.estimatedProductBundlePath.filter { FileManager.default.fileExists(atPath: $0.path) }.lazy.compactMap {
                     let stderr = try? NSTaskCommand(launchPath: "/usr/bin/codesign", args: ["-dvvvvv", $0.path]).run().stderr
                     // extract `Apple Development: xxxxxx@xxxxxx (XXXXXXXXXX)`
