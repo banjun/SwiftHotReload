@@ -1,5 +1,6 @@
 #if DEBUG || os(macOS)
 import Foundation
+import MachO
 
 public struct Env: Codable, Equatable {
     public static let shared: Env = .init()
@@ -10,8 +11,11 @@ public struct Env: Codable, Equatable {
     }
     /// /Users/username/Library/Developer/Xcode/DerivedData/app-abcdefg0123456789/Build/Products/Debug-iphonesimulator
     var estimatedBuilProductsDir: [URL] {
-        DYLD_FRAMEWORK_PATH.filter {!$0.isEmpty}.map(URL.init(fileURLWithPath:))
-        + [(__XPC_DYLD_FRAMEWORK_PATH ?? __XPC_DYLD_LIBRARY_PATH ?? __XCODE_BUILT_PRODUCTS_DIR_PATHS ?? __XPC_DYLD_LIBRARY_PATH ?? PWD).map(URL.init(fileURLWithPath:))].compactMap {$0}
+        let a = DYLD_FRAMEWORK_PATH.filter {!$0.isEmpty}.map(URL.init(fileURLWithPath:))
+        let b = [(__XPC_DYLD_FRAMEWORK_PATH ?? __XPC_DYLD_LIBRARY_PATH ?? __XCODE_BUILT_PRODUCTS_DIR_PATHS ?? __XPC_DYLD_LIBRARY_PATH ?? PWD).map(URL.init(fileURLWithPath:))].compactMap {$0}
+        let c = LC_RPATHs.filter { $0.contains("/DerivedData/") && $0.contains("/Build/Products/") }.map { $0.replacingOccurrences(of: "/PackageFrameworks", with: "")
+        }.map(URL.init(fileURLWithPath:))
+        return a + b + c
     }
     /// /Users/username/Library/Developer/Xcode/DerivedData
     public var estimataedDerivedData: URL? {
@@ -135,6 +139,9 @@ public struct Env: Codable, Equatable {
     var CFBundleIdentifier: String?
     var CFBundleName: String?
 
+    // dyld
+    var LC_RPATHs: [String]
+
     private init() {
         let env = ProcessInfo().environment
         SIMULATOR_HOST_HOME = env["SIMULATOR_HOST_HOME"]
@@ -159,6 +166,24 @@ public struct Env: Codable, Equatable {
         CFBundleExecutable = info["CFBundleExecutable"] as? String
         CFBundleIdentifier = info["CFBundleIdentifier"] as? String
         CFBundleName = info["CFBundleName"] as? String
+
+        // dyld
+        LC_RPATHs = Self.LC_RPATHs
+    }
+
+    static let LC_RPATHs: [String] = (0..<_dyld_image_count()).reduce(into: []) { rpaths, i in
+        guard let header = UnsafeRawPointer(_dyld_get_image_header(i))?.assumingMemoryBound(to: mach_header_64.self) else { return }
+        // https://opensource.apple.com/source/xnu/xnu-2050.18.24/EXTERNAL_HEADERS/mach-o/loader.h
+        // The load commands directly follow the mach_header
+        let load_commands: [UnsafePointer<load_command>] = (1..<header.pointee.ncmds).reduce(into: [UnsafeRawPointer(header.advanced(by: 1)).assumingMemoryBound(to: load_command.self)]) { r, _ in
+            r.append(UnsafeRawPointer(r.last!).advanced(by: Int(r.last!.pointee.cmdsize)).assumingMemoryBound(to: load_command.self))
+        }
+        let rpath_commands: [UnsafePointer<rpath_command>] = load_commands
+            .filter { $0.pointee.cmd == LC_RPATH }
+            .map { UnsafeRawPointer($0).assumingMemoryBound(to: rpath_command.self) }
+        rpaths.append(contentsOf: rpath_commands.map {
+            String(cString: UnsafeRawPointer($0).advanced(by: .init($0.pointee.path.offset)).assumingMemoryBound(to: CChar.self))
+        })
     }
 }
 #endif
