@@ -124,12 +124,14 @@ final actor Proxy {
             self.session = nil
         case .connecting: break
         case .connected:
-            do {
-                NSLog("%@", "🍓 \(#function) connected: sending builderParams = \(builderParams)")
-                let payload = try JSONEncoder().encode(builderParams)
-                try self.session?.send(payload, toPeers: [peerID], with: .reliable)
-            } catch {
-                NSLog("%@", "🍓 \(#function) error = \(error)")
+            Task.detached { @MainActor in
+                do {
+                    NSLog("%@", "🍓 \(#function) connected: sending builderParams = \(self.builderParams)")
+                    let payload = try JSONEncoder().encode(self.builderParams)
+                    try await self.session?.send(payload, toPeers: [peerID], with: .reliable)
+                } catch {
+                    NSLog("%@", "🍓 \(#function) error = \(error)")
+                }
             }
         @unknown default: break
         }
