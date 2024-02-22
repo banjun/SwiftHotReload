@@ -21,6 +21,8 @@ We can use either Standalone Reloader or Proxy Reloader. Standalone Reloader run
 | macOS app (App Sandbox = NO)  | ✅         | ✅ |
 | macOS app (App Sandbox = YES) | ❌         | ❌ (codesign cannot be trusted to load) |
 | macOS app (Designed for iPad) | ❌         | ❌ (codesign cannot be trusted to load) |
+| visionOS app on Simulator     | ✅         | ✅ |
+| visionOS app on Device        | ?          | ? (codesign with Individual, Company or Enterprise ADP) |
 
 
 ## Features
