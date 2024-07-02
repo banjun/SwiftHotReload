@@ -31,11 +31,12 @@ We can use either Standalone Reloader or Proxy Reloader. Standalone Reloader run
 * Build a swift file and emit dylib (standalone, run on the app runtime process)
     * Estimate build environmentd and intermediate interfaces
 * Load a dylib while the app on runtime
-* Supports apps on macOS and simulators for iOS, iPadOS, and possibly visionOS
+* Supports apps on macOS and simulators for iOS, iPadOS, and visionOS
    * SPM project structures
    * CocoaPods project structures
 * Update trigger for SwiftUI views
 * Helper app on host & Reload on devices
+* Compatible for App Store submission, as long as caller side suppress any calls in Release build
 
 ### TODOs (not yet implemented, nice to have)
 
