@@ -8,6 +8,7 @@ public final class ProxyReloader: ObservableObject {
     @Published public private(set) var dateReloaded: Date?
 
     public init(_ builderParams: Builder.InputParameters) {
+        print(Env.shared)
         self.proxy = Proxy(builderParams: builderParams, shouldConnectToBuilder: UserConsent.alert)
 
         Task {
