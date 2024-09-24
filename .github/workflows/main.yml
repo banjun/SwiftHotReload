@@ -15,9 +15,9 @@ jobs:
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: '^15.2.0'
+        xcode-version: '^16.0.0'
     - uses: actions/checkout@v4
-    - run: swift build -c ${{ matrix.configuration }} -Xswiftc -enable-testing
+    - run: swift build -c ${{ matrix.configuration }} -Xswiftc -enable-testing -Xswiftc -swift-version -Xswiftc 6
   podspec:
     strategy:
       matrix:
@@ -27,7 +27,7 @@ jobs:
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: '^15.2.0'
+        xcode-version: '^16.0.0'
     - uses: actions/checkout@v4
     - run: bundle install
     - run: bundle exec pod lib lint --platforms=${{ matrix.platform }} --configuration=${{ matrix.configuration }}
