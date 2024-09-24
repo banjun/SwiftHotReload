@@ -4,8 +4,9 @@
 // Release build is not disabled as BuildHelper.app is to be buildable for generating a mac helper app.
 // TODO: BuildHelper may be separated into sub- spec/package
 import Foundation
-import Combine
+@preconcurrency import Combine
 
+@MainActor
 public final class BuildHelper: ObservableObject {
     let proxyBrowser = ProxyBrowser()
 
@@ -17,7 +18,7 @@ public final class BuildHelper: ObservableObject {
     private var fileMonitor: FileMonitor? {
         didSet {
             Task {
-                fileMonitorCancellable = await fileMonitor?.$fileChanges.compactMap {$0}.sink { [weak self] _ in
+                fileMonitorCancellable = await fileMonitor?.fileChanges.compactMap {$0}.sink { [weak self] _ in
                     self?.reload()
                 }
             }

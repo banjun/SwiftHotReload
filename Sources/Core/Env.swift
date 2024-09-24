@@ -1,9 +1,16 @@
 #if DEBUG || os(macOS)
 import Foundation
 import MachO
+import struct os.OSAllocatedUnfairLock
 
-public struct Env: Codable, Equatable {
-    public static let shared: Env = .init()
+public struct Env: Codable, Equatable, Sendable {
+    public static let host: Env = _host.withLock { _host in
+        if let _host { return _host }
+        let env = Env()
+        _host = env
+        return env
+    }
+    private static let _host: OSAllocatedUnfairLock<Env?> = .init(uncheckedState: nil)
 
     /// /Users/username
     public var estimatedHomeDir: URL? {
@@ -64,8 +71,9 @@ public struct Env: Codable, Equatable {
                 .reversed().drop {$0 != "Platforms"}.dropFirst().reversed()
                 .joined(separator: "/")
         }).map(URL.init(fileURLWithPath:))
-        ?? (self != .shared ? Env.shared.estimatedDeveloperDir : nil) // on iphoneos, developer dir is not available in env. use host env typically on macOS build helper
+        ?? (self != .host ? Env.host.estimatedDeveloperDir : nil) // on iphoneos, developer dir is not available in env. use host env typically on macOS build helper
     }
+
     /// /Applications/Xcode1501.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator17.0.sdk
     public var estimatedSDK: URL? {
         estimatedDeveloperDir?.appendingPathComponent("Platforms")

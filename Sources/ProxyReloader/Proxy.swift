@@ -1,10 +1,12 @@
 #if DEBUG || os(macOS)
 import Foundation
-import MultipeerConnectivity
+@preconcurrency import MultipeerConnectivity
+@preconcurrency import Combine
 
 final actor Proxy {
     private let loader: Loader = .init()
-    @Published private(set) var receivedDylibFiles: [URL] = []
+    private let receivedDylibFilesSubject: CurrentValueSubject<[URL], Never> = .init([])
+    var receivedDylibFiles: AnyPublisher<[URL], Never> { receivedDylibFilesSubject.eraseToAnyPublisher() }
     private var shouldConnectToBuilder: (_ title: String, _ message: String) async -> Bool
     func setShouldConnectToBuilder(_ shouldConnectToBuilder: @escaping (String, String) async -> Bool) { self.shouldConnectToBuilder = shouldConnectToBuilder }
 
@@ -26,7 +28,7 @@ final actor Proxy {
         case fileAlreadyExists(String)
     }
 
-    init(hostName: String = ProcessInfo().hostName, bundleID: String = Env.shared.CFBundleIdentifier!, processID: Int32 = ProcessInfo().processIdentifier, builderParams: Builder.InputParameters, shouldConnectToBuilder: @escaping (_ title: String, _ message: String) async -> Bool) {
+    init(hostName: String = ProcessInfo().hostName, bundleID: String = Env.host.CFBundleIdentifier!, processID: Int32 = ProcessInfo().processIdentifier, builderParams: Builder.InputParameters, shouldConnectToBuilder: @Sendable @escaping (_ title: String, _ message: String) async -> Bool) {
         self.builderParams = builderParams
         self.shouldConnectToBuilder = shouldConnectToBuilder
         // the doc: The display name is intended for use in UI elements, and should be short and descriptive of the local peer. The maximum allowable length is 63 bytes in UTF-8 encoding. The displayName parameter may not be nil or an empty string.
@@ -54,18 +56,23 @@ final actor Proxy {
         session = nil
     }
 
+
+    func send(_ data: Data, toPeers peerIDs: [MCPeerID], with mode: MCSessionSendDataMode) throws {
+        try session?.send(data, toPeers: peerIDs, with: mode)
+    }
+
     // MARK: - MCNearbyServiceAdvertiserDelegate
 
-    private final class AdvertiserDelegate: NSObject, MCNearbyServiceAdvertiserDelegate {
-        unowned var proxy: Proxy?
+    private final class AdvertiserDelegate: NSObject, MCNearbyServiceAdvertiserDelegate, Sendable {
+        unowned nonisolated(unsafe) var proxy: Proxy?
         override init() { super.init() }
-        func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
+        func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @Sendable @escaping (Bool, MCSession?) -> Void) {
             NSLog("%@", "🍓 \(#function) advertiser = \(advertiser), peerID = \(peerID), context = \(context?.count ?? 0) bytes")
-            Task { await proxy?.advertiser(advertiser, didReceiveInvitationFromPeer: peerID, withContext: context, invitationHandler: invitationHandler) }
+            Task { @Sendable in await proxy?.advertiser(advertiser, didReceiveInvitationFromPeer: peerID, withContext: context, invitationHandler: invitationHandler) }
         }
         func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Swift.Error) {
             NSLog("%@", "🍓 \(#function) advertiser = \(advertiser), error = \(error)")
-            Task { await proxy?.advertiser(advertiser, didNotStartAdvertisingPeer: error) }
+            Task { @Sendable in await proxy?.advertiser(advertiser, didNotStartAdvertisingPeer: error) }
         }
     }
 
@@ -91,13 +98,13 @@ final actor Proxy {
 
     // MARK: - MCSessionDelegate
 
-    private final class SessionDelegate: NSObject, MCSessionDelegate {
-        unowned var proxy: Proxy?
+    private final class SessionDelegate: NSObject, MCSessionDelegate, Sendable {
+        unowned nonisolated(unsafe) var proxy: Proxy?
         override init() { super.init() }
 
         func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
             NSLog("%@", "🍓 \(#function) peerID = \(peerID), state = \(state)")
-            Task { await proxy?.session(session, peer: peerID, didChange: state) }
+            Task { @Sendable in await self.proxy?.session(session, peer: peerID, didChange: state) }
         }
 
         func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
@@ -114,7 +121,7 @@ final actor Proxy {
 
         func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Swift.Error?) {
             NSLog("%@", "🍓 \(#function) resourceName = \(resourceName), peerID = \(peerID), localURL = \(String(describing: localURL)), error = \(String(describing: error))")
-            Task { await proxy?.session(session, didFinishReceivingResourceWithName: resourceName, fromPeer: peerID, at: localURL, withError: error) }
+            Task { @Sendable in await proxy?.session(session, didFinishReceivingResourceWithName: resourceName, fromPeer: peerID, at: localURL, withError: error) }
         }
     }
 
@@ -124,11 +131,11 @@ final actor Proxy {
             self.session = nil
         case .connecting: break
         case .connected:
-            Task.detached { @MainActor in
+            Task.detached { @Sendable in
                 do {
                     NSLog("%@", "🍓 \(#function) connected: sending builderParams = \(self.builderParams)")
                     let payload = try JSONEncoder().encode(self.builderParams)
-                    try await self.session?.send(payload, toPeers: [peerID], with: .reliable)
+                    try await self.send(payload, toPeers: [peerID], with: .reliable)
                 } catch {
                     NSLog("%@", "🍓 \(#function) error = \(error)")
                 }
@@ -161,7 +168,10 @@ final actor Proxy {
         Task {
             do {
                 try await loader.load(dylibPath: tmpDylibPath)
-                receivedDylibFiles.append(tmpDylibPath)
+                let urls: [URL] = receivedDylibFilesSubject.value + [tmpDylibPath]
+                Task { @MainActor in
+                    await receivedDylibFilesSubject.send(urls)
+                }
             } catch {
                 NSLog("%@", "🍓 \(#function) line \(#line) error = \(error)")
             }
