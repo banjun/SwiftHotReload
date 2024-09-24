@@ -26,7 +26,11 @@ import UIKit
 extension UserConsent {
     @MainActor
     static func alert(_ title: String, _ message: String) async -> Bool {
-        guard let window = (UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.compactMap { $0.windows.first { $0.isKeyWindow } }.first) else {
+        let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+#if os(visionOS)
+            .filter { $0.session.role != .immersiveSpaceApplication }
+#endif
+        guard let window = (windowScenes.compactMap { $0.windows.first { $0.isKeyWindow } }.first) else {
             NSLog("%@", "⚠️ cannot get keyWindow from scenes = \(UIApplication.shared.connectedScenes)")
             return false
         }
