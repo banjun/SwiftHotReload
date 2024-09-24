@@ -1,9 +1,11 @@
 #if DEBUG || os(macOS)
 import Foundation
+@preconcurrency import Combine
 
 final actor FileMonitor {
     private let file: URL
-    @Published private(set) var fileChanges: Date?
+    private let fileChangesSubject: CurrentValueSubject<Date?, Never> = .init(nil)
+    var fileChanges: AnyPublisher<Date?, Never> { fileChangesSubject.eraseToAnyPublisher() }
 
     private var monitor: DispatchSourceFileSystemObject? {
         didSet {
@@ -19,7 +21,7 @@ final actor FileMonitor {
     init(file: URL) {
         self.file = file
 
-        guard Env.shared.DTPlatformName != "iphoneos" else {
+        guard Env.host.DTPlatformName != "iphoneos" else {
             NSLog("%@", "🍓 ⚠️ To do hot reloads, the process host should be able to execute swiftc. cancelled installing the file monitor. ⚠️")
             return
         }
@@ -33,20 +35,27 @@ final actor FileMonitor {
         NSLog("%@", "🍓 \(#function) starting file monitor for file at \(file.path)")
         let handle = FileHandle(forReadingAtPath: file.path)
         monitor = handle.map { DispatchSource.makeFileSystemObjectSource(fileDescriptor: $0.fileDescriptor, eventMask: .all) }
-        monitor?.setEventHandler { [unowned self] in
-            let content = try? TargetSwiftFile(file).content
-            guard content != lastTargetFileContent else {
-                // NSLog("%@", "🍓 target file change detected but same content. ignored.")
-                return
-            }
-            NSLog("%@", "🍓 target file change detected")
-            lastTargetFileContent = content
-            fileChanges = Date()
-
-            self.monitor = nil
-            handle?.closeFile()
-            self.install()
+        monitor?.setEventHandler { [weak self] in
+            guard let self else { return }
+            Task { await targetFileChangeDetected(handle) }
         }
+    }
+
+    private func targetFileChangeDetected(_ handle: FileHandle?) {
+        let content = try? TargetSwiftFile(file).content
+        guard content != lastTargetFileContent else {
+            // NSLog("%@", "🍓 target file change detected but same content. ignored.")
+            return
+        }
+        NSLog("%@", "🍓 target file change detected")
+        lastTargetFileContent = content
+        Task { @MainActor in
+            await fileChangesSubject.send(Date())
+        }
+
+        monitor = nil
+        handle?.closeFile()
+        install()
     }
 }
 

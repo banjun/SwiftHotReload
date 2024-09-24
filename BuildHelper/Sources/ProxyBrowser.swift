@@ -3,8 +3,9 @@
 // Release build is not disabled as BuildHelper.app is to be buildable for generating a mac helper app.
 // TODO: BuildHelper may be separated into sub- spec/package
 import Foundation
-import MultipeerConnectivity
+@preconcurrency import MultipeerConnectivity
 @testable import SwiftHotReload // NOTE: use internal methods. SPM does not allow overlapping sources for a single Package.swift
+import SwiftUI
 
 final actor ProxyBrowser {
     @Published private(set) var runtimePeers: [RuntimePeer] = []
@@ -12,14 +13,16 @@ final actor ProxyBrowser {
     private let session: MCSession
     private let browser: MCNearbyServiceBrowser
     private let sessionDelegate: SessionDelegate = .init()
-    let browserView: MCBrowserViewControllerView
+    private(set) var browserView: @Sendable () async -> MCBrowserViewControllerView
 
-    init(hostName: String = ProcessInfo().hostName, bundleID: String? = Env.shared.CFBundleIdentifier, processID: Int32 = ProcessInfo().processIdentifier) {
+    init(hostName: String = ProcessInfo().hostName, bundleID: String? = Env.host.CFBundleIdentifier, processID: Int32 = ProcessInfo().processIdentifier) {
         let displayName = String("Client[\(hostName)] \(bundleID ?? "cli")(\(processID))".utf8.prefix(63))!
         self.peerID = MCPeerID(displayName: displayName)
-        self.session = MCSession(peer: peerID, securityIdentity: nil, encryptionPreference: .required)
-        self.browser = MCNearbyServiceBrowser(peer: peerID, serviceType: MultipeerConnectivityConstants.serviceType)
-        self.browserView = MCBrowserViewControllerView(browser: browser, session: session)
+        let session = MCSession(peer: peerID, securityIdentity: nil, encryptionPreference: .required)
+        self.session = session
+        let browser = MCNearbyServiceBrowser(peer: peerID, serviceType: MultipeerConnectivityConstants.serviceType)
+        self.browser = browser
+        self.browserView = { await MCBrowserViewControllerView(browser: browser, session: session) }
 
 //        Task {
             session.delegate = sessionDelegate
@@ -69,16 +72,16 @@ final actor ProxyBrowser {
 }
 
 private extension ProxyBrowser {
-    private final class SessionDelegate: NSObject, MCSessionDelegate {
-        unowned var owner: ProxyBrowser?
+    private final class SessionDelegate: NSObject, MCSessionDelegate, Sendable {
+        unowned nonisolated(unsafe) var owner: ProxyBrowser?
         override init() { super.init() }
 
         func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
-            Task { await owner?.session(session, peer: peerID, didChange: state) }
+            Task { @Sendable in await self.owner?.session(session, peer: peerID, didChange: state) }
         }
 
         func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-            Task { await owner?.session(session, didReceive: data, fromPeer: peerID) }
+            Task { @Sendable in await self.owner?.session(session, didReceive: data, fromPeer: peerID) }
         }
 
         func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {

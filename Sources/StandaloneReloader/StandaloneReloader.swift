@@ -1,7 +1,8 @@
 #if DEBUG || os(macOS)
 import Foundation
-import Combine
+@preconcurrency import Combine
 
+@MainActor
 public final class StandaloneReloader: ObservableObject {
     private let fileMonitor: FileMonitor
     private let core: Core?
@@ -9,7 +10,7 @@ public final class StandaloneReloader: ObservableObject {
     @Published public private(set) var dateReloaded: Date?
     private var cancellables: Set<AnyCancellable> = []
 
-    public init(monitoredSwiftFile: URL, env: Env = .shared, derivedData: URL? = nil, confBuildDirAppRandomString: String? = nil, mainModule: String? = nil, modules: [String] = [], configurationPlatform: String? = nil, arch: String? = nil, targetTriple: String? = nil, sdk: URL? = nil, platformName: String? = nil) {
+    @MainActor public init(monitoredSwiftFile: URL, env: Env = .host, derivedData: URL? = nil, confBuildDirAppRandomString: String? = nil, mainModule: String? = nil, modules: [String] = [], configurationPlatform: String? = nil, arch: String? = nil, targetTriple: String? = nil, sdk: URL? = nil, platformName: String? = nil) {
         if env.DTPlatformName == "iphoneos" {
             NSLog("%@", "🍓 ⚠️ To do hot reloads standalone, the process host should be able to execute swiftc. ⚠️")
         }
@@ -24,7 +25,7 @@ public final class StandaloneReloader: ObservableObject {
         }
 
         Task {
-            await fileMonitor.$fileChanges.compactMap {$0}.sink { [weak self] _ in
+            await fileMonitor.fileChanges.compactMap {$0}.sink { [weak self] _ in
                 self?.reload()
             }.store(in: &cancellables)
         }

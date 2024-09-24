@@ -9,8 +9,8 @@ SwiftHotReload is an experimental project. We investigate a real world applicati
 
 ## Supported Platforms
 
-* Xcode 15.x
-* Host macOS 13.x, 14.x
+* Xcode 16.x
+* Host macOS 14.x, 15.x
 
 We can use either Standalone Reloader or Proxy Reloader. Standalone Reloader runs all required tasks on the runtime target process. Proxy Reloader runs on the runtime target process and receives dylibs from BuildHelper via network. BuildHelper runs on the host Mac and monitors file changes to build the file and send dylibs to Proxy on the target.
 

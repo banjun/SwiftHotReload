@@ -15,7 +15,7 @@ public final actor Builder {
     private let platformName: String
     private let codesignIdentity: String?
 
-    public struct InputParameters: Codable {
+    public struct InputParameters: Codable, Sendable {
         public var targetSwiftFile: URL
         public var env: Env
         public var derivedData: URL?
@@ -29,7 +29,7 @@ public final actor Builder {
         public var platformName: String?
         public var codesignIdentity: String?
 
-        public init(targetSwiftFile: URL, env: Env = .shared, derivedData: URL? = nil, confBuildDirAppRandomString: String? = nil, mainModule: String? = nil, modules: [String] = [], configurationPlatform: String? = nil, arch: String? = nil, targetTriple: String? = nil, sdk: URL? = nil, platformName: String? = nil, codesignIdentity: String? = nil) {
+        public init(targetSwiftFile: URL, env: Env = .host, derivedData: URL? = nil, confBuildDirAppRandomString: String? = nil, mainModule: String? = nil, modules: [String] = [], configurationPlatform: String? = nil, arch: String? = nil, targetTriple: String? = nil, sdk: URL? = nil, platformName: String? = nil, codesignIdentity: String? = nil) {
             self.targetSwiftFile = targetSwiftFile
             self.env = env
             self.derivedData = derivedData
@@ -97,7 +97,7 @@ public final actor Builder {
         }
         self.buildDir = buildDir
         self.targetTriple = p.targetTriple ?? p.env.estimatedTargetTriple!
-        self.sdk = p.sdk ?? p.env.estimatedSDK ?? Env.shared.estimatedSDK
+        self.sdk = p.sdk ?? p.env.estimatedSDK ?? Env.host.estimatedSDK
         self.platformName = p.platformName ?? p.env.DTPlatformName!
         self.codesignIdentity = p.codesignIdentity
     }
@@ -112,7 +112,7 @@ public final actor Builder {
     }
 
     func build(dylibPath: URL) throws {
-        guard Env.shared.DTPlatformName != "iphoneos" else {
+        guard Env.host.DTPlatformName != "iphoneos" else {
             NSLog("%@", "🍓 ⚠️ To do hot reloads, the process host should be able to execute swiftc. cancelled building the target swift file. ⚠️")
             throw Error.cannotBuildOnRuntime(platformName)
         }

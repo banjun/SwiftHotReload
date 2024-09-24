@@ -29,6 +29,7 @@ struct BuildHelperApp: SwiftUI.App {
 
     struct ContentView: View {
         @EnvironmentObject var buildHelper: BuildHelper
+        @State private var browserView: MCBrowserViewControllerView?
 
         var body: some View {
             VStack(spacing: 20) {
@@ -38,7 +39,9 @@ struct BuildHelperApp: SwiftUI.App {
                 Text("Date Reloaded" + "\n" + (buildHelper.dateReloaded?.formatted(date: .numeric, time: .complete) ?? "Never"))
                     .multilineTextAlignment(.center)
 
-                buildHelper.proxyBrowser.browserView
+                if let browserView { browserView } else { ProgressView().task {
+                    browserView = await buildHelper.proxyBrowser.browserView()
+                }}
             }
             .padding()
         }
