@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "SwiftHotReload"
-  spec.version      = "0.2.0"
+  spec.version      = "0.2.1"
   spec.summary      = "Hot Reload on Swift"
   spec.description  = <<-DESC
   Hot reload on swift app using at _dynamicReplacement
