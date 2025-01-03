@@ -113,6 +113,11 @@ App Sandbox = NO
     * `-Xfrontend` `-enable-private-imports`
         * use the flag instead of making related  `func`s or `var`s visible by removing `private`
 
+or copy-and-paste on the Xcode build settings GUI to overwrite in 1 step.
+
+```
+OTHER_SWIFT_FLAGS[config=Debug] = -Xfrontend -enable-implicit-dynamic -Xfrontend -enable-private-imports
+```
 
 ### (optional) Insert hooks to update SwiftUI view after reloadings:
 
