@@ -170,7 +170,7 @@ final actor Proxy {
                 try await loader.load(dylibPath: tmpDylibPath)
                 let urls: [URL] = receivedDylibFilesSubject.value + [tmpDylibPath]
                 Task { @MainActor in
-                    await receivedDylibFilesSubject.send(urls)
+                    receivedDylibFilesSubject.send(urls)
                 }
             } catch {
                 NSLog("%@", "🍓 \(#function) line \(#line) error = \(error)")

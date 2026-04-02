@@ -18,7 +18,7 @@ public final class ProxyReloader: ObservableObject {
         }
     }
 
-    public func setShouldConnectToBuilder(_ shouldConnectToBuilder: @escaping (String, String) async -> Bool) {
+    public func setShouldConnectToBuilder(_ shouldConnectToBuilder: @Sendable @escaping (String, String) async -> Bool) {
         Task { await proxy.setShouldConnectToBuilder(shouldConnectToBuilder) }
     }
 }

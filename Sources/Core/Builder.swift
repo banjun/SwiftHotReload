@@ -59,7 +59,7 @@ public final actor Builder {
         }
         self.derivedData = derivedData
         self.moduleCachePath = derivedData.appendingPathComponent("ModuleCache.noindex")
-        guard let confBuildDirAppRandomString = p.confBuildDirAppRandomString ?? p.env.estimatedConfigurationBuildRandomString else {
+        guard let confBuildDirAppRandomString = p.confBuildDirAppRandomString ?? p.env.estimatedConfigurationBuildRandomString  ?? Env.host.estimatedConfigurationBuildRandomString else {
             throw Error.missingRequiredEnvironments("confBuildDirAppRandomString")
         }
         guard let mainModule = p.mainModule ?? p.env.estimatedMainModule else {

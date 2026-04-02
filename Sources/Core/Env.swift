@@ -14,7 +14,7 @@ public struct Env: Codable, Equatable, Sendable {
 
     /// /Users/username
     public var estimatedHomeDir: URL? {
-        (SIMULATOR_HOST_HOME ?? NSHomeDirectory()).map(URL.init(fileURLWithPath:))
+        URL(fileURLWithPath: SIMULATOR_HOST_HOME ?? NSHomeDirectory())
     }
     /// /Users/username/Library/Developer/Xcode/DerivedData/app-abcdefg0123456789/Build/Products/Debug-iphonesimulator
     var estimatedBuilProductsDir: [URL] {
@@ -22,7 +22,17 @@ public struct Env: Codable, Equatable, Sendable {
         let b = [(__XPC_DYLD_FRAMEWORK_PATH ?? __XPC_DYLD_LIBRARY_PATH ?? __XCODE_BUILT_PRODUCTS_DIR_PATHS ?? __XPC_DYLD_LIBRARY_PATH ?? PWD).map(URL.init(fileURLWithPath:))].compactMap {$0}
         let c = LC_RPATHs.filter { $0.contains("/DerivedData/") && $0.contains("/Build/Products/") }.map { $0.replacingOccurrences(of: "/PackageFrameworks", with: "")
         }.map(URL.init(fileURLWithPath:))
-        return a + b + c
+        let r = a + b + c
+        return r
+//        // for device, feed by BuildHelper
+//        func fallback() -> [URL] {
+//            guard let estimataedDerivedData, let estimatedConfigurationBuildRandomString else {return []}
+//            return [estimataedDerivedData
+//                .appendingPathComponent(estimatedConfigurationBuildRandomString)
+//                .appendingPathComponent("Build/Products")]
+//            // TODO
+//        }
+//        return !r.isEmpty ? r : (self != .host ? Env.host.estimatedBuilProductsDir : [])
     }
     /// /Users/username/Library/Developer/Xcode/DerivedData
     public var estimataedDerivedData: URL? {
@@ -31,6 +41,7 @@ public struct Env: Codable, Equatable, Sendable {
                 .reversed().drop {$0 != "DerivedData"}.reversed()
                 .joined(separator: "/"))
         }.first { $0.path.contains("DerivedData") }
+        ?? (self != .host ? Env.host.estimataedDerivedData : nil) // for device, feed by BuildHelper
     }
     /// app-abcdefg0123456789
     public var estimatedConfigurationBuildRandomString: String? {
@@ -59,6 +70,7 @@ public struct Env: Codable, Equatable, Sendable {
     /// Debug
     public var estimatedConfigurationPlatform: String? {
         estimatedBuilProductsDir.first?.lastPathComponent
+        ?? DTPlatformName.map {"Debug-\($0)"} // assuming Debug (non Release, and named Debug), assuming non-macOS (=has suffix)
     }
     /// iphonesimulator
     var estimatedPlatform: String? {
@@ -70,7 +82,7 @@ public struct Env: Codable, Equatable, Sendable {
             $0.components(separatedBy: "/")
                 .reversed().drop {$0 != "Platforms"}.dropFirst().reversed()
                 .joined(separator: "/")
-        }).map(URL.init(fileURLWithPath:))
+        }).flatMap {$0.isEmpty ? nil : URL(fileURLWithPath: $0)}
         ?? (self != .host ? Env.host.estimatedDeveloperDir : nil) // on iphoneos, developer dir is not available in env. use host env typically on macOS build helper
     }
 
@@ -120,7 +132,22 @@ public struct Env: Codable, Equatable, Sendable {
     /// Product app bundle on host
     public var estimatedProductBundlePath: [URL] {
         guard let CFBundleName else { return [] }
-        return estimatedBuilProductsDir.map { $0.appendingPathComponent(CFBundleName).appendingPathExtension("app") }
+        if !estimatedBuilProductsDir.isEmpty {
+            return estimatedBuilProductsDir.map {
+                $0.appendingPathComponent(CFBundleName).appendingPathExtension("app")
+            }
+        } else {
+            guard let estimataedDerivedData,
+                  let configurationBuildRandomString = estimatedConfigurationBuildRandomString ?? Env.host.estimatedConfigurationBuildRandomString,
+                  let configurationPlatform = estimatedConfigurationPlatform else { return [] }
+            return [estimataedDerivedData
+                .appendingPathComponent(configurationBuildRandomString)
+                .appendingPathComponent("Build/Products")
+                .appendingPathComponent(configurationPlatform)
+            ].map {
+                $0.appendingPathComponent(CFBundleName).appendingPathExtension("app")
+            }
+        }
     }
 
     // Environment Variables
