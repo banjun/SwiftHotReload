@@ -1,8 +1,8 @@
 #if DEBUG || os(macOS)
 import Foundation
-import MultipeerConnectivity
+@preconcurrency import MultipeerConnectivity
 
-struct RuntimePeer {
+struct RuntimePeer: Sendable {
     /// route for sending dylib
     var session: MCSession
     /// the destination peerID that will load the dylib on runtime

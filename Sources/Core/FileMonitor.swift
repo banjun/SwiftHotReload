@@ -50,7 +50,7 @@ final actor FileMonitor {
         NSLog("%@", "🍓 target file change detected")
         lastTargetFileContent = content
         Task { @MainActor in
-            await fileChangesSubject.send(Date())
+            fileChangesSubject.send(Date())
         }
 
         monitor = nil

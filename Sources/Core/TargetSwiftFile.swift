@@ -14,7 +14,7 @@ struct TargetSwiftFile {
     }
 
     init(_ file: URL) throws {
-        content = try String(contentsOf: file)
+        content = try String(contentsOf: file, encoding: .utf8)
     }
 }
 

@@ -4,7 +4,8 @@
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
+      buildImplicitDependencies = "YES"
+      buildArchitectures = "Automatic">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -14,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "63980F422AEA8DA50099B122"
-               BuildableName = "SwiftHotReloadExample.app"
-               BlueprintName = "SwiftHotReloadExample"
-               ReferencedContainer = "container:SwiftHotReloadExample.xcodeproj">
+               BlueprintIdentifier = "63980F702AEA93310099B122"
+               BuildableName = "SwiftHotReload.framework"
+               BlueprintName = "SwiftHotReload"
+               ReferencedContainer = "container:SwiftHotReload.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -38,17 +39,8 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
-      allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "63980F422AEA8DA50099B122"
-            BuildableName = "SwiftHotReloadExample.app"
-            BlueprintName = "SwiftHotReloadExample"
-            ReferencedContainer = "container:SwiftHotReloadExample.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
+      allowLocationSimulation = "YES"
+      queueDebuggingEnableBacktraceRecording = "Yes">
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -56,16 +48,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "63980F422AEA8DA50099B122"
-            BuildableName = "SwiftHotReloadExample.app"
-            BlueprintName = "SwiftHotReloadExample"
-            ReferencedContainer = "container:SwiftHotReloadExample.xcodeproj">
+            BlueprintIdentifier = "63980F702AEA93310099B122"
+            BuildableName = "SwiftHotReload.framework"
+            BlueprintName = "SwiftHotReload"
+            ReferencedContainer = "container:SwiftHotReload.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
